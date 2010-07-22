@@ -82,6 +82,15 @@ module Tmux
       end
     end
 
+    # @return [Session] The first {Session session}. This is
+    #   especially useful if working with a server that only has one
+    #   {Session session}.
+    attr_reader :session
+    undef_method "session"
+    def session
+      sessions.first
+    end
+
     # @tmux list-clients
     # @param [Hash] search Filters the resulting hash using {FilterableHash#filter}
     # @return [Hash] A hash with information for all clients
