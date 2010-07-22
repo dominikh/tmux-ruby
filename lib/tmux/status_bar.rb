@@ -1,6 +1,19 @@
 require "tmux/status_bar/field"
 
 module Tmux
+  # Every {Session session} has a status bar. This is where various
+  # information as well as a list of {Window windows} will be
+  # displayed. For this purpose, the status bar is divided into three
+  # parts: the left, center and right part. While the center part
+  # displays the window list, the left and right part can be set to
+  # display any text.
+  #
+  # This class allows accessing various attributes (e.g. the
+  # {#background_color background color} of the bar) and the
+  # editable parts ({#left left} and {#right right}).
+  #
+  # Note: You will not have to instantiate this class. Use
+  # {Session#status_bar} instead.
   class StatusBar
     # @return [Session]
     attr_reader :session
@@ -8,6 +21,7 @@ module Tmux
     attr_reader :left
     # @return [Field]
     attr_reader :right
+    # @param [Session] session
     def initialize(session)
       @session = session
       @left    = Field.new(self,  :left)
