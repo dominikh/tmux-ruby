@@ -76,6 +76,8 @@ module Tmux
 
     # @tmux list-sessions
     # @return [Array<Session>] All {Session sessions}
+    attr_reader :sessions
+    undef_method "sessions"
     def sessions(search = {})
       sessions_information(search).map do |name, information|
         Session.new(self, name)
