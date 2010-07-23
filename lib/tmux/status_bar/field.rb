@@ -39,6 +39,7 @@ module Tmux
         self.text = backup if backup
         widget
       end
+      alias_method :remove_widget, :pop_widget
 
       # @overload widget
       #   @return [Widget] The currently displayed {Widget widget},
