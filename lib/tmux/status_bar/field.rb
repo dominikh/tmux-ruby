@@ -28,6 +28,7 @@ module Tmux
         @widgets << widget
         widget.field = self
       end
+      alias_method :add_widget, :push_widget
 
       # Removes the current {Widget widget} from the stack.
       #
