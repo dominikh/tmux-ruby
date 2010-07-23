@@ -32,11 +32,16 @@ module Tmux
 
       # Removes the current {Widget widget} from the stack.
       #
-      # @return [Widget] the {Widget widget} which has been popped
-      def pop_widget
-        widget = @widgets.pop
-        backup = @backups.pop
-        self.text = backup if backup
+      # @param [Widget] pop If not nil, try to remove the specified
+      #   widget instead of popping off the topmost one.
+      # @return [Widget, nil] the {Widget widget} which has been popped
+      def pop_widget(pop = nil)
+        widget = pop || @widgets.first
+        pos = @widgets.index(widget)
+        @widgets.delete_at(pos)
+        backup = @backups.delete_at(pos)
+
+        self.text = backup if backup and pos == 0
         widget
       end
       alias_method :remove_widget, :pop_widget
