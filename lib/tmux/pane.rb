@@ -43,7 +43,7 @@ module Tmux
     end
 
     # @return [Integer]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     attr_reader :width
     undef_method "width"
     def width
@@ -53,7 +53,7 @@ module Tmux
     end
 
     # @return [Integer]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     attr_reader :height
     undef_method "height"
     def height
@@ -63,7 +63,7 @@ module Tmux
     end
 
     # @return [Integer]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     attr_reader :max_history_size
     undef_method "max_history_size"
     def max_history_size
@@ -73,7 +73,7 @@ module Tmux
     end
 
     # @return [Integer]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     attr_reader :current_history_size
     undef_method "current_history_size"
     def current_history_size
@@ -83,7 +83,7 @@ module Tmux
     end
 
     # @return [Filesize]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     attr_reader :memory_usage
     undef_method "memory_usage"
     def memory_usage
@@ -95,7 +95,7 @@ module Tmux
     # Enter copy mode.
     #
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     # @tmux copy-mode
     def enter_copy_mode
       server.check_for_version!("1.0")
@@ -109,7 +109,7 @@ module Tmux
     # @param [Boolean] select If true, the new {Window window} will be
     #   selected automatically
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     # @tmux break-pane
     def break(select = true)
       server.check_for_version!("1.0")
@@ -129,7 +129,7 @@ module Tmux
     #
     # @tmux kill-pane
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     def kill
       server.check_for_version!("1.0")
 
@@ -140,7 +140,7 @@ module Tmux
     #
     # @tmux kill-pane -a
     # @return [void]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     def kill_others
       server.check_for_version!("1.1")
 
@@ -151,7 +151,7 @@ module Tmux
     #
     # @tmux clear-history
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     def clear_history
       server.check_for_version!("1.0")
 
@@ -161,7 +161,7 @@ module Tmux
     # Displays a clock in the pane.
     #
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     # @tmux clock-mode
     def clock_mode
       server.check_for_version!("1.0")
@@ -173,7 +173,7 @@ module Tmux
     # Selects the pane.
     #
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     def select
       server.check_for_version!("1.0")
 
@@ -184,7 +184,7 @@ module Tmux
     #
     # @param [Pane] pane The pane to swap with.
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     def swap_with(pane)
       server.check_for_version!("1.0")
 
@@ -196,7 +196,7 @@ module Tmux
     # @param [String] key
     # @see #send_keys
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     def send_key(key)
       server.check_for_version!("1.0")
 
@@ -207,7 +207,7 @@ module Tmux
     #
     # @param [Array<String>] keys
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     def send_keys(keys)
       server.check_for_version!("1.0")
 
@@ -228,7 +228,7 @@ module Tmux
     #
     # @param [String] command
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     def run(command)
       server.check_for_version!("1.0")
 
@@ -240,7 +240,7 @@ module Tmux
     # but without sending a final Return.
     #
     # @param [String] text
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     # @return [void]
     # @see Pane#run
     def write(text)
@@ -259,7 +259,7 @@ module Tmux
     # @tmux paste-buffer
     # @see Buffer#paste
     # @see Window#paste
-    # @tmuxver >=1.3
+    # @tmuxver &gt;=1.3
     def paste(buffer, pop = false, translate = true, separator = nil)
       server.check_for_version!("1.3")
 
@@ -280,7 +280,7 @@ module Tmux
     # @option args [String] :command Command to run in the new pane (optional)
     #
     # @tmux split-window
-    # @tmuxver >=1.2
+    # @tmuxver &gt;=1.2
     def split(args = {})
       server.check_for_version!("1.2")
 
@@ -323,7 +323,7 @@ module Tmux
     # @param [Symbol<:never, :if_same_window, :always>] return_new whether to return the pane we moved
     #   to. Note: this might produce a short flickering if we have
     #   to move to the appropriate window and back.
-    # @tmuxver >=1.3
+    # @tmuxver &gt;=1.3
     # @return [Pane, nil]
     def select_direction(direction, return_new = :if_same_window)
       raise ArgumentError unless [:up, :down, :left, :right].include?(direction)
@@ -368,7 +368,7 @@ module Tmux
     # @return [Pane, nil]
     # @param [Number] num how many panes to move down. Note: will be ignored on tmux versions <1.3
     # @param return_new (see Tmux::Pane#select_direction)
-    # @tmuxver >=1.3 for `num` parameter
+    # @tmuxver &gt;=1.3 for `num` parameter
     # @tmux down-pane or select-pane -t:+
     def select_next(num = 1, return_new = :if_same_window)
       if server.version > "1.2"
@@ -383,7 +383,7 @@ module Tmux
     # @return [Pane, nil]
     # @param [Number] num how many panes to move up. Note: will be ignored on tmux versions <1.3
     # @param return_new (see Tmux::Pane#select_direction)
-    # @tmuxver >=1.3 for `num` parameter
+    # @tmuxver &gt;=1.3 for `num` parameter
     # @tmux up-pane or select-pane -t:-
     def select_previous(num = 1, return_new = :if_same_window)
       if server.version > "1.2"

@@ -102,7 +102,7 @@ module Tmux
     #   buffer with this separator. +translate+ must be false.
     #
     # @tmux paste-buffer
-    # @tmuxver >=1.3 for pasting to {Pane panes}
+    # @tmuxver &gt;=1.3 for pasting to {Pane panes}
     # @return [void]
     # @see Window#paste
     # @see Pane#paste

@@ -48,7 +48,7 @@ module Tmux
     end
 
     # @return [String]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     # @tmux rename-window
     attr_accessor :name
     undef_method "name"
@@ -65,7 +65,7 @@ module Tmux
     end
 
     # @return [Integer]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     attr_reader :width
     undef_method "width"
     def width
@@ -75,7 +75,7 @@ module Tmux
     end
 
     # @return [Integer]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     attr_reader :height
     undef_method "height"
     def height
@@ -183,8 +183,8 @@ module Tmux
     # @param [Symbol<:even_horizontal, :even_vertical, :main_horizontal, :main_vertical] The layout to apply to the window
     # @return [Symbol]
     # @tmux select-layout
-    # @tmuxver >=1.3 for :tiled layout
-    # @tmuxver >=1.0 for all other layouts
+    # @tmuxver &gt;=1.3 for :tiled layout
+    # @tmuxver &gt;=1.0 for all other layouts
     attr_writer :layout
     undef_method "layout="
     def layout=(layout)
@@ -200,7 +200,7 @@ module Tmux
     # @param [Hash] search Filters the resulting hash using {FilterableHash#filter}
     # @return [Hash] A hash with information for all panes
     # @tmux list-panes
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     def panes_information(search={})
       server.check_for_version!("1.1")
 
@@ -230,7 +230,7 @@ module Tmux
     end
 
     # @return [Array<Pane>] All {Pane panes}
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     attr_reader :panes
     undef_method "panes"
     def panes

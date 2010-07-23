@@ -75,7 +75,7 @@ module Tmux
     #
     # @tmux lock-client
     # @return [void]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     def lock
       @server.check_for_version!("1.1")
 
@@ -100,7 +100,7 @@ module Tmux
 
     # @tmux show-messages
     # @return [Array<String>] A log of messages
-    # @tmuxver >=1.2
+    # @tmuxver &gt;=1.2
     attr_reader :messages
     undef_method "messages"
     def messages
@@ -113,7 +113,7 @@ module Tmux
     #
     # @tmux display-panes
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     def display_panes
       @server.check_for_version!("1.0")
 
@@ -121,7 +121,7 @@ module Tmux
     end
 
     # @return [Window] The currently displayed {Window window}.
-    # @tmuxver >=1.2
+    # @tmuxver &gt;=1.2
     attr_reader :current_window
     undef_method "current_window"
     def current_window
@@ -132,7 +132,7 @@ module Tmux
     end
 
     # @return [Pane] The currently displayed {Pane pane}.
-    # @tmuxver >=1.2
+    # @tmuxver &gt;=1.2
     attr_reader :current_pane
     undef_method "current_pane"
     def current_pane
@@ -148,7 +148,7 @@ module Tmux
     # @param [String] text The message to display
     # @tmux display-message
     # @return [void]
-    # @tmuxver >=1.0
+    # @tmuxver &gt;=1.0
     def message(text)
       @server.check_for_version!("1.0")
 

@@ -120,7 +120,7 @@ module Tmux
     #
     # @tmux lock-session
     # @return [void]
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     def lock
       @server.check_for_version!("1.1")
 
@@ -188,7 +188,7 @@ module Tmux
     end
 
     # @tmux list-windows
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     # @param [Hash] search Filters the resulting hash using {FilterableHash#filter}
     # @return [Hash] A hash with information for all windows
     # @return [Hash]
@@ -213,7 +213,7 @@ module Tmux
 
     # @tmux list-windows
     # @return [Hash{Number => Window}] All {Window windows}
-    # @tmuxver >=1.1
+    # @tmuxver &gt;=1.1
     attr_reader :windows
     undef_method "windows"
     def windows
@@ -259,7 +259,7 @@ module Tmux
     # Selects the next (higher index) window
     #
     # @param [Number] num How many windows to move
-    # @tmuxver >=1.3
+    # @tmuxver &gt;=1.3
     # @return [Window]
     def select_next_window(num = 1)
       @server.invoke_command "select-window -t #{identifier}:+#{num}"
@@ -269,7 +269,7 @@ module Tmux
     # Selects the previous (lower index) window
     #
     # @param [Number] num How many windows to move
-    # @tmuxver >=1.3
+    # @tmuxver &gt;=1.3
     # @return [Window]
     def select_previous_window(num = 1)
       @server.invoke_command "select-window -t:-#{num}"
