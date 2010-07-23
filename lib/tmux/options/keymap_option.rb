@@ -10,7 +10,7 @@ module Tmux
         # @see Option.to_tmux
         # @api private
         def to_tmux(value)
-          raise ArgumentError unless [:emacs, :vi].include?(value)
+          raise ArgumentError unless [:emacs, :vi, :default].include?(value)
           super
         end
       end

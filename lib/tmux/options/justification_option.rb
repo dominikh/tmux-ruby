@@ -10,7 +10,7 @@ module Tmux
         # @see Option.to_tmux
         # @api private
         def to_tmux(value)
-          raise ArgumentError unless [:left, :right, :centre].include?(value)
+          raise ArgumentError unless [:left, :right, :centre, :default].include?(value)
           super
         end
       end
