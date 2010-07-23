@@ -5,7 +5,7 @@ module Tmux
     # @see Option
     class KeymapOption < SymbolOption
       class << self
-        # @param (see Option.to_tmux)
+        # @param [Symbol<:emacs, :vi, :default>] value
         # @return (see Option.to_tmux)
         # @see Option.to_tmux
         # @api private
