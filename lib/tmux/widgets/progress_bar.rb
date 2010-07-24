@@ -87,7 +87,7 @@ module Tmux
       end
 
       # Display the progress bar. {#value=} automatically calls this
-      # method to update the bar.
+      # method to update the widget.
       #
       # @return [void]
       def display

@@ -95,7 +95,7 @@ module Tmux
       self == other
     end
 
-    # @return [Number]
+    # @return [String]
     attr_reader :name
     # @return [Server]
     attr_reader :server

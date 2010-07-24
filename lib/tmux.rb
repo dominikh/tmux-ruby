@@ -29,8 +29,10 @@ module Tmux
     #
     # @param [String] command Command to invoke
     # @return [String] all output
+    # @api private
     def invoke_command(command)
       command = "#{@binary} #{command}"
+
       $stderr.puts(command) if verbose?
       `#{command} 2>&1`
     end
