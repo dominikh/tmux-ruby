@@ -95,8 +95,19 @@ module Tmux
       self == other
     end
 
+    # @overload name
+    #   @return [String]
+    # @overload name=(new_name)
+    #   Renames the session.
+    #
+    #   @todo escape name
+    #   @todo check return value. any conflicts? [see also {https://sourceforge.net/tracker/?func=detail&aid=3034296&group_id=200378&atid=973262}]
+    #   @return [String]
+    #   @tmux rename-session
     # @return [String]
-    attr_reader :name
+    attr_accessor :name
+    undef_method "name"
+    undef_method "name="
     # @return [Server]
     attr_reader :server
     # @return [OptionsList]
@@ -107,6 +118,11 @@ module Tmux
       @server, @name = server, name
       @status_bar = StatusBar.new(self)
       @options = OptionsList.new(:session, self, false)
+    end
+
+    def name=(new_name)
+      ret = @server.invoke_command("rename-session -t #{identifier} '#{new_name}'")
+      @name = new_name
     end
 
     # @return [String]
