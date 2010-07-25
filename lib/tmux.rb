@@ -12,7 +12,7 @@ require "tmux/options_list"
 require "tmux/options"
 require "tmux/widget"
 module Tmux
-  @binary = "/usr/bin/tmux"
+  @binary = `which tmux`.chomp
   @verbose = false
 
   class << self
