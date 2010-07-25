@@ -120,11 +120,6 @@ module Tmux
       end
       hash.extend FilterableHash
       hash.filter(search)
-      # hash.select { |device, client|
-      #   client.all? { |key, value|
-      #     !search.has_key?(key) || value == search[key]
-      #   }
-      # }
     end
 
     # @tmux list-clients
