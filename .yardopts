@@ -1,1 +1,1 @@
---tag "tmux:tmux command" --tag "tmuxver:Required tmux version" --hide-void-return -m markdown
+--tag "tmux:tmux command" --tag "tmuxver:Required tmux version" --hide-void-return -m markdown --private --protected --default-return Undefined
