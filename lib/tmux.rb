@@ -28,10 +28,14 @@ module Tmux
     # Invokes a tmux command and returns all output.
     #
     # @param [String] command Command to invoke
+    # @param [Boolean] unset_tmux If true, unsets $TMUX before calling
+    #   tmux, to allow nesting
     # @return [String] all output
     # @api private
-    def invoke_command(command)
-      command = "#{@binary} #{command}"
+    def invoke_command(cmd, unset_tmux = false)
+      command = ""
+      command << "TMUX='' " if unset_tmux
+      command << "#{@binary} #{cmd}"
 
       $stderr.puts(command) if verbose?
       `#{command} 2>&1`
