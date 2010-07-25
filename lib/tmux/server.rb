@@ -1,5 +1,54 @@
+# -*- coding: utf-8 -*-
 module Tmux
   class Server
+    # Creates a new session
+    #
+    # @option args [Boolean] :attach (false) Attach to the new session?
+    # @option args [String] :name (nil) Name of the new session. Will
+    #   be automatically generated of nil.
+    # @option args [String] :window_name (nil) Name of the initial
+    #   window. Cannot be used when grouping sessions.
+    # @option args [Session] :group_with (nil) Group with this
+    #   session, sharing all windows.
+    # @option args [String] :command (nil) Execute this command in the
+    #   initial window. Cannot be used when grouping sessions.
+    #
+    # @return [Session, nil] Returns the new {Session session} if a
+    #   `:name` has been given and if `:attach` is false
+    #
+    # @raise [ArgumentError] if combining `:group_with` and `:window_name`
+    #   or :command
+    #
+    # @tmuxver &gt;=1.4
+    def create_session(args = {})
+      check_for_version!("1.4")
+
+      if args[:group_with] && (args[:window_name] || args[:command])
+        raise ArgumentError, "Cannot combine :group_with and :window_name or :command"
+      end
+
+      # FIXME shell escape names
+      flags = []
+      flags << "-d" unless args[:attach]
+      flags << "-n '#{args[:window_name]}'"     if args[:window_name]
+      flags << "-s '#{args[:name]}'"            if args[:name]
+      flags << "-t '#{args[:group_with].name}'" if args[:group_with]
+      flags << args[:command]                   if args[:command]
+
+      command = "new-session #{flags.join(" ")}"
+      # TODO invoke command
+      ret = invoke_command(command, true)
+      if ret.start_with?("duplicate session:")
+        raise RuntimeError, ret
+      elsif ret.start_with?("sessions should be nested with care.")
+        raise Exception::InTmux("new-session")
+      else
+        if args[:name] and !args[:attach]
+          return Session.new(self, args[:name])
+        end
+      end
+    end
+
     # @return  [String]
     attr_reader :socket
     # @return [OptionsList]
