@@ -31,6 +31,7 @@ module Tmux
     # @param [Boolean] unset_tmux If true, unsets $TMUX before calling
     #   tmux, to allow nesting
     # @return [String] all output
+    # @raise [Exception::UnknownCommand]
     # @api private
     def invoke_command(cmd, unset_tmux = false)
       command = ""
@@ -38,7 +39,12 @@ module Tmux
       command << "#{@binary} #{cmd}"
 
       $stderr.puts(command) if verbose?
-      `#{command} 2>&1`
+      ret = `#{command} 2>&1`
+      if ret.start_with?("unknown command:")
+        raise Exception::UnknownCommand, ret.split(":", 2).last.strip
+      else
+        return ret
+      end
     end
   end
 end
