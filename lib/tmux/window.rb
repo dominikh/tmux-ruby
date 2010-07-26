@@ -13,10 +13,31 @@ module Tmux
       OptionsList.new(:window, server, true)
     end
 
+    # @overload number
+    #   @return [Number]
+    # @overload number=(new_number)
+    #   @return [Number]
+    #   @raise [Exception::IndexInUse]
+    #   @see #move
     # @return [Number]
-    attr_reader :number
+    attr_accessor :number
+    undef_method "number="
+
+    # @overload session
+    #   @return [Session]
+    # @overload session=(new_session)
+    #   Moves the window to another {Session session}. First it tries
+    #   to reuse the current number of the window. If that number is
+    #   already used in the new {Session session}, the first free
+    #   number will be used instead.
+    #
+    #   @return [Session]
+    #   @raise [Exception::IndexInUse]
+    #   @see #move
+    #   @todo use base-index
     # @return [Session]
-    attr_reader :session
+    attr_accessor :session
+    undef_method "session="
     # @return [OptionsList]
     attr_reader :options
     # @return [Status]
@@ -27,6 +48,45 @@ module Tmux
       @status = Status.new(self)
     end
 
+    def session=(new_session)
+      i = -1
+      first_try = true
+      begin
+        num = (first_try ? @number : (i += 1))
+        move(new_session, num)
+      rescue IndexInUse
+        first_try = false
+        retry
+      end
+    end
+
+    def number=(new_number)
+      move(@session, new_number)
+    end
+
+    # Moves the window to either a different session, a different
+    # position or both.
+    #
+    # @param [Session] new_session
+    # @param [Number] new_number
+    #
+    # @return [void]
+    # @raise [Exception::IndexInUse]
+    # @see #number=
+    # @see #session=
+    #
+    # @tmux move-window
+    def move(new_session, new_number)
+      return if @session == new_session && @number == new_number
+      target = "%s:%s" % [new_session.identifier, new_number]
+
+      res = server.invoke_command("move-window -s #{identifier} -t #{target}")
+      if res =~ /^can't move window: index in use: \d+/
+        raise IndexInUse, [new_session, new_number]
+      end
+      @session = new_session
+      @number  = new_number
+    end
 
     def <=>(other)
       return nil unless other.is_a?(Window)
@@ -278,20 +338,6 @@ module Tmux
     # @tmux swap-window
     def swap_with(window)
       server.invoke_command "swap-window -s #{identifier} -t #{window.identifier}"
-    end
-
-    # @return [void]
-    # @param [Session] destination
-    # @param [String] destination
-    def move(destination)
-      # if session, first try original window number, then iterate from 0 upwards
-      # if string, parse it, move to it, set ivars if no exception
-      # TODO support -d
-
-      res = server.invoke_command("move-window -s #{identifier} -t #{destination}").chomp
-      if res =~ /^can't move window: index in use: (\d+)/
-        # TODO raise
-      end
     end
 
     # @param [Symbol<:never, :if_same_window, :always>] return_new whether to return the pane we moved
