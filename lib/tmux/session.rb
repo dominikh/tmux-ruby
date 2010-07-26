@@ -9,6 +9,8 @@ module Tmux
   # of {Window windows} may be present in the same session. Once all
   # sessions are {Session#kill killed}, tmux exits.
   class Session
+    include Comparable
+
     # @return [Options]
     def self.options(session)
       OptionsList.new(:session, session, true)
@@ -93,6 +95,11 @@ module Tmux
     # @return [Boolean]
     def eql?(other)
       self == other
+    end
+
+    def <=>(other)
+      return nil unless other.is_a?(Session)
+      [@server, @name] <=> [other.server, other.name]
     end
 
     # @overload name

@@ -4,6 +4,8 @@ module Tmux
   # which is a separate pseudo terminal (the pty(4) manual page
   # documents the technical details of pseudo terminals).
   class Pane
+    include Comparable
+
     # @return [Window]
     attr_reader :window
     # @return [Number]
@@ -17,7 +19,6 @@ module Tmux
       self.class == other.class && @window == other.window && @number = other.number
     end
 
-
     # @return [Number]
     def hash
       [@window.hash, @number].hash
@@ -26,6 +27,11 @@ module Tmux
     # @return [Boolean]
     def eql?(other)
       self == other
+    end
+
+    def <=>(other)
+      return nil unless other.is_a?(Pane)
+      [@window, @number] <=> [other.window, other.number]
     end
 
     # @return [Server]

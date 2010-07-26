@@ -6,6 +6,8 @@ module Tmux
   # which is a separate pseudo terminal (the pty(4) manual page
   # documents the technical details of pseudo terminals).
   class Window
+    include Comparable
+
     # @return [OptionsList]
     def self.options(server)
       OptionsList.new(:window, server, true)
@@ -23,6 +25,12 @@ module Tmux
       @session, @number = session, number
       @options = OptionsList.new(:window, self, false)
       @status = Status.new(self)
+    end
+
+
+    def <=>(other)
+      return nil unless other.is_a?(Window)
+      [@session, @number] <=> [other.session, other.number]
     end
 
     # @return [Boolean]

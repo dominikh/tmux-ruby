@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 module Tmux
   class Server
+    include Comparable
+
     # Creates a new session
     #
     # @option args [Boolean] :attach (false) Attach to the new session?
@@ -57,6 +59,11 @@ module Tmux
     def initialize(socket = "default")
       @socket = socket
       @options = OptionsList.new(:server, self, false)
+    end
+
+    def <=>(other)
+      return nil unless other.is_a?(Server)
+      @socket <=> other.socket
     end
 
     # @return [Server] Returns self. This is useful for other classes
