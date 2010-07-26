@@ -121,7 +121,13 @@ module Tmux
     end
 
     def name=(new_name)
+      raise ArgumentError if new_name.to_s.strip.empty?
       ret = @server.invoke_command("rename-session -t #{identifier} '#{new_name}'")
+
+      if ret.start_with?("duplicate session:")
+        raise RuntimeError, ret
+      end
+
       @name = new_name
     end
 
