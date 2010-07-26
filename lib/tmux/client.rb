@@ -160,7 +160,34 @@ module Tmux
     # @tmux command-prompt + select-window
     # @return [void]
     def select_interactively
-      @server.invoke_command "command-prompt -p index -t #@device \"select-window -t:%%\"" # TODO put into own method
+      command_prompt "select-window -t:%%", ["index"]
+    end
+
+    # Opens a command prompt in the client. This may be used to
+    # execute commands interactively.
+    #
+    # @param [String] template The template is used as the command to
+    #   execute. Before the command is executed, the first occurrence
+    #   of the string '%%' and all occurrences of '%1' are replaced by
+    #   the response to the first prompt, the second '%%' and all '%2'
+    #   are replaced with the response to the second prompt, and so on
+    #   for further prompts. Up to nine prompt responses may be
+    #   replaced ('%1' to '%9')
+    #
+    # @param [Array<String>] prompts prompts is a list
+    #   of prompts which are displayed in order; otherwise a single
+    #   prompt is displayed, constructed from template
+    #
+    # @return [void]
+    # @tmux command-prompt
+    # @todo escape prompts and template
+    def command_prompt(template, prompts = [])
+      prompts = prompts.join(",")
+      flags = []
+      flags << "-p #{prompts}" unless prompts.empty?
+      flags << "-t #{identifier}"
+      flags << "\"#{template}\""
+      @server.invoke_command "command-prompt #{flags.join(" ")}"
     end
   end
 end
