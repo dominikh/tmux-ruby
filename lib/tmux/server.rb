@@ -38,7 +38,7 @@ module Tmux
       flags << args[:command]                   if args[:command]
 
       command = "new-session #{flags.join(" ")}"
-      # TODO invoke command
+
       ret = invoke_command(command, true)
       if ret.start_with?("duplicate session:")
         raise RuntimeError, ret

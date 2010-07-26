@@ -161,7 +161,6 @@ module Tmux
     # @return [void]
     def select_interactively
       @server.invoke_command "command-prompt -p index -t #@device \"select-window -t:%%\"" # TODO put into own method
-      # @server.invoke_command "select-prompt -t #@device"
     end
   end
 end

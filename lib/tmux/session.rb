@@ -108,7 +108,6 @@ module Tmux
     #   Renames the session.
     #
     #   @todo escape name
-    #   @todo check return value. any conflicts? [see also {https://sourceforge.net/tracker/?func=detail&aid=3034296&group_id=200378&atid=973262}]
     #   @return [String]
     #   @tmux rename-session
     # @return [String]
