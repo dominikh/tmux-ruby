@@ -106,7 +106,6 @@ module Tmux
     #   @tmux rename-session
     # @return [String]
     attr_accessor :name
-    undef_method "name"
     undef_method "name="
     # @return [Server]
     attr_reader :server
