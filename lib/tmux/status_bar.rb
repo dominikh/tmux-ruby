@@ -17,8 +17,15 @@ module Tmux
   class StatusBar
     # @return [Session]
     attr_reader :session
+    # The left {Field field} which may display custom {Field#text
+    # text} and {Widget widgets}.
+    #
     # @return [Field]
     attr_reader :left
+
+    # The right {Field field} which may display custom {Field#text
+    # text} and {Widget widgets}.
+    #
     # @return [Field]
     attr_reader :right
     # @param [Session] session
@@ -79,6 +86,9 @@ module Tmux
       @session.options.status_interval = value
     end
 
+    # Sets the justification of the window list component of the status
+    # line.
+    #
     # @return [Symbol<:left, :right, :centre>]
     attr_accessor :justification
     undef_method "justification"
@@ -104,6 +114,10 @@ module Tmux
       @session.options.status_keys = val
     end
 
+    # Instruct tmux to treat top-bit-set characters in
+    # {StatusBar::Field#text} as UTF-8. Notably, this is important for
+    # wide characters. This option defaults to false.
+    #
     # @return [Boolean]
     attr_accessor :utf8
     undef_method "utf8"

@@ -98,16 +98,32 @@ module Tmux
       @window.panes_information[@number][:memory]
     end
 
+    # @group Modes
+
     # Enter copy mode.
     #
     # @return [void]
     # @tmuxver &gt;=1.0
     # @tmux copy-mode
-    def enter_copy_mode
+    def copy_mode
       server.check_for_version!("1.0")
 
       server.invoke_command "copy-mode -t #{identifier}"
     end
+
+    # Displays a clock in the pane.
+    #
+    # @return [void]
+    # @tmuxver &gt;=1.0
+    # @tmux clock-mode
+    def clock_mode
+      server.check_for_version!("1.0")
+
+      server.invoke_command "clock-mode -t #{identifier}"
+    end
+    alias_method :show_clock, :clock_mode
+
+    # @endgroup
 
     # Breaks the pane off from its containing {Window window} to make
     # it the only pane in a new {Window window}.
@@ -131,6 +147,8 @@ module Tmux
       return pane
     end
 
+    # @group Killing
+
     # Kills the pane.
     #
     # @tmux kill-pane
@@ -153,6 +171,8 @@ module Tmux
       server.invoke_command "kill-pane -a -t #{identifier}"
     end
 
+    # @endgroup
+
     # Removes and frees the history of the pane.
     #
     # @tmux clear-history
@@ -162,28 +182,6 @@ module Tmux
       server.check_for_version!("1.0")
 
       server.invoke_command "clear-history -t #{identifier}"
-    end
-
-    # Displays a clock in the pane.
-    #
-    # @return [void]
-    # @tmuxver &gt;=1.0
-    # @tmux clock-mode
-    def clock_mode
-      server.check_for_version!("1.0")
-
-      server.invoke_command "clock-mode -t #{identifier}"
-    end
-    alias_method :show_clock, :clock_mode
-
-    # Selects the pane.
-    #
-    # @return [void]
-    # @tmuxver &gt;=1.0
-    def select
-      server.check_for_version!("1.0")
-
-      server.invoke_command "select-pane -t #{identifier}"
     end
 
     # Swaps the pane with another one.
@@ -196,6 +194,8 @@ module Tmux
 
       server.invoke_command "swap-pane -s #{identifier} -t #{pane.identifier}"
     end
+
+    # @group Input
 
     # Sends a key to the pane.
     #
@@ -272,6 +272,8 @@ module Tmux
       buffer.paste(self, pop, translate, separator)
     end
 
+    # @endgroup
+
     # Splits the pane.
     #
     # @return [Pane, nil] Returns the newly created pane, but only if
@@ -324,6 +326,9 @@ module Tmux
         return nil
       end
     end
+
+
+    # @group Selecting
 
     # @param [Symbol<:up, :down, :left, :right>] direction direction to move to
     # @param [Symbol<:never, :if_same_window, :always>] return_new whether to return the pane we moved
@@ -400,5 +405,17 @@ module Tmux
 
       return @window.current_pane(return_new)
     end
+
+    # Selects the pane.
+    #
+    # @return [void]
+    # @tmuxver &gt;=1.0
+    def select
+      server.check_for_version!("1.0")
+
+      server.invoke_command "select-pane -t #{identifier}"
+    end
+
+    # @endgroup
   end
 end

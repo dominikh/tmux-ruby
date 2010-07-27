@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require "tmux/window/status"
 
 module Tmux
@@ -5,12 +6,18 @@ module Tmux
   # screen and may be split into rectangular {Pane panes}, each of
   # which is a separate pseudo terminal (the pty(4) manual page
   # documents the technical details of pseudo terminals).
+  #
+  # @todo Figure out better names for some attributes, e.g. mode_mouse
   class Window
     include Comparable
 
-    # @return [OptionsList]
-    def self.options(server)
-      OptionsList.new(:window, server, true)
+    class << self
+      # @return [OptionsList]
+      attr_reader :options
+      undef_method "options"
+      def options(server)
+        OptionsList.new(:window, server, true)
+      end
     end
 
     # @overload number
@@ -159,6 +166,14 @@ module Tmux
       "%s:%s" % [@session.identifier, @number]
     end
 
+    # Aggressively resize the window. This means that tmux will resize
+    # the window to the size of the smallest {Session session} for
+    # which it is the current window, rather than the smallest
+    # {Session session} to which it is attached. The window may resize
+    # when the current window is changed on another {Session session};
+    # this option is good for full-screen programs which support
+    # SIGWINCH and poor for interactive programs such as shells.
+    #
     # @return [Boolean]
     attr_accessor :aggressive_resize
     undef_method "aggressive_resize"
@@ -172,6 +187,13 @@ module Tmux
       @options.aggressive_resize = bool
     end
 
+    # Control automatic window renaming. When this setting is enabled,
+    # tmux will attempt – on supported platforms – to rename the
+    # window to reflect the command currently running in it. This flag
+    # is automatically disabled for an individual window when a name
+    # is specified at creation with {Session#create_window} or
+    # {Server#create_session}, or later with {#name=}.
+    #
     # @return [Boolean]
     attr_accessor :automatic_rename
     undef_method "automatic_rename"
@@ -185,6 +207,10 @@ module Tmux
       @options.automatic_rename = bool
     end
 
+    # Duplicate input to any {Pane pane} to all other {Pane panes} in
+    # the same window (only for {Pane panes} that are not in any
+    # special mode)
+    #
     # @return [Boolean]
     attr_accessor :synchronize_panes
     undef_method "synchronize_panes"
@@ -198,6 +224,10 @@ module Tmux
       @options.synchronize_panes = bool
     end
 
+    # A window with this flag set is not destroyed when the program
+    # running in it exits. The window may be reactivated with
+    # {#respawn}.
+    #
     # @return [Boolean]
     attr_accessor :remain_on_exit
     undef_method "remain_on_exit"
@@ -211,6 +241,9 @@ module Tmux
       @options.remain_on_exit = bool
     end
 
+    # Instructs tmux to expect UTF-8 sequences to appear in this
+    # window.
+    #
     # @return [Boolean]
     attr_accessor :utf8
     undef_method "utf8"

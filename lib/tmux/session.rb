@@ -191,7 +191,7 @@ module Tmux
     end
     alias_method :attached?, :attached
 
-    # @return [Array<Client>]
+    # @return [Array<Client>] All {Client clients}
     attr_reader :clients
     undef_method "clients"
     def clients
@@ -266,7 +266,7 @@ module Tmux
     end
 
     # @tmux list-buffers
-    # @return [Array<Buffer>]
+    # @return [Array<Buffer>] All {Buffer buffers}
     attr_reader :buffers
     undef_method "buffers"
     def buffers
@@ -274,6 +274,8 @@ module Tmux
         Buffer.new(num, self)
       end
     end
+
+    # @group Selecting
 
     # Select the last (previously selected) window.
     #
@@ -302,5 +304,7 @@ module Tmux
       @server.invoke_command "select-window -t:-#{num}"
       current_window
     end
+
+    # @endgroup
   end
 end

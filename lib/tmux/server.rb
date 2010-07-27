@@ -152,7 +152,6 @@ module Tmux
     # @tmux list-clients
     # @param [Hash] search Filters the resulting hash using {FilterableHash#filter}
     # @return [Hash] A hash with information for all clients
-    # @return [Hash]
     def clients_information(search = {})
       clients = invoke_command "list-clients"
       hash = {}
