@@ -13,6 +13,7 @@ module Tmux
     require "tmux/options/attr_option"
     require "tmux/options/keymap_option"
     require "tmux/options/justification_option"
+    require "tmux/options/clock_mode_style_option"
 
     # Table with option names and their appropriate typecasts.
     Mapping = {
@@ -75,7 +76,7 @@ module Tmux
       "alternate-screen" => BooleanOption,
       "automatic-rename" => BooleanOption,
       "clock-mode-colour" => ColorOption,
-      "clock-mode-style" => NumberOption,
+      "clock-mode-style" => ClockModeStyleOption,
       "force-height" => NumberOption,
       "force-width" => NumberOption,
       "main-pane-height" => NumberOption,
