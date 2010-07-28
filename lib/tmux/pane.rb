@@ -327,6 +327,17 @@ module Tmux
       end
     end
 
+    # Resizes the pane.
+    #
+    # @param [Symbol<:up, :down, :left, :right>] direction Direction
+    #   in which to resize
+    # @param [Number] adjustment How many lines or cells to resize.
+    # @return [void]
+    def resize(direction, adjustment = 1)
+      raise ArgumentError unless [:up, :down, :left, :right].include?(direction)
+      direction = direction.to_s.upcase[0..0]
+      server.invoke_command "resize-pane -#{direction} -t #{identifier} #{adjustment}"
+    end
 
     # @group Selecting
 
