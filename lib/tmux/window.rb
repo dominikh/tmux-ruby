@@ -398,5 +398,24 @@ module Tmux
 
       return new_pane if new_pane
     end
+
+    # Reactivates a window in which the command has exited.
+    #
+    # @param [String, nil] command The command to use to respawn the
+    #   window. If nil, the command used when the window was created is
+    #   executed.
+    # @param [Boolean] kill Unless `kill` is true, only inactive windows can be respawned
+    # @return [void]
+    # @tmux respawn-window
+    # @see #remain_on_exit
+    # @todo escape command
+    def respawn(command = nil, kill = false)
+      flags = []
+      flags << "-k" if kill
+      flags << "-t #{identifier}"
+      flags << "\"#{command}\"" if command
+
+      server.invoke_command "respawn-window #{flags.join(" ")}"
+    end
   end
 end
