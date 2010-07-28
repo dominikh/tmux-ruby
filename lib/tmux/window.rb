@@ -308,7 +308,6 @@ module Tmux
       hash = {}
       output = server.invoke_command "list-panes -t #{identifier}"
       output.each_line do |pane|
-        # 2: [44x11] [history 48/2000, 3945 bytes]
         params = pane.match(/^(?<num>\d+): \[(?<width>\d+)x(?<height>\d+)\] \[history (?<cur_history>\d+)\/(?<max_history>\d+), (?<memory>\d+) bytes\]$/)
         num = params[:num].to_i
         width = params[:width].to_i
