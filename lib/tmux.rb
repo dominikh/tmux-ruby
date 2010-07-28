@@ -11,6 +11,8 @@ require "tmux/status_bar"
 require "tmux/options_list"
 require "tmux/options"
 require "tmux/widget"
+
+# @todo Support querying and modifying keymaps
 module Tmux
   @binary = `which tmux`.chomp
   @verbose = false
