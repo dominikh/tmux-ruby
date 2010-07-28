@@ -257,6 +257,256 @@ module Tmux
       @options.utf8 = bool
     end
 
+    # Monitor for activity in the window. Windows with activity are
+    # highlighted in the {StatusBar status line}.
+    #
+    # @return [Boolean]
+    attr_accessor :monitor_activity
+    undef_method "monitor_activity"
+    undef_method "monitor_activity="
+    def monitor_activity
+      @options.monitor_activity
+    end
+    alias_method :monitor_activity?, :monitor_activity
+
+    def monitor_activity=(bool)
+      @options.monitor_activity = bool
+    end
+
+    # Monitor content in the window. When the
+    # {http://linux.die.net/man/3/fnmatch fnmatch(3)} pattern appears
+    # in the window, it is highlighted in the {StatusBar status line}.
+    #
+    # @return [String]
+    attr_accessor :monitor_content
+    undef_method "monitor_content"
+    undef_method "monitor_content="
+    def monitor_content
+      @options.monitor_content
+    end
+
+    def monitor_content=(pattern)
+      @options.monitor_content = pattern
+    end
+
+    # Prevent tmux from resizing the window to greater than
+    # `max_width`. A value of zero restores the default unlimited
+    # setting.
+    #
+    # @return [Number]
+    attr_accessor :max_width
+    undef_method "max_width"
+    undef_method "max_width="
+    def max_width
+      @options.force_width
+    end
+
+    def max_width=(value)
+      @options.force_width = value
+    end
+    alias_method :force_width, :max_width
+    alias_method :force_width=, "max_width="
+
+    # Prevent tmux from resizing the window to greater than
+    # `max_height`. A value of zero restores the default unlimited
+    # setting.
+    #
+    # @return [Number]
+    attr_accessor :max_height
+    undef_method "max_height"
+    undef_method "max_height="
+    def max_height
+      @options.force_height
+    end
+
+    def max_height=(value)
+      @options.force_height = value
+    end
+    alias_method :force_height, :max_height
+    alias_method :force_height=, "max_height="
+
+    # If this option is set to true, tmux will generate
+    # {http://linux.die.net/man/1/xterm xterm(1)}-style function key
+    # sequences. These have a number included to indicate modifiers
+    # such as Shift, Alt or Ctrl. The default is false.
+    #
+    # @return [Boolean]
+    attr_accessor :xterm_keys
+    undef_method "xterm_keys"
+    undef_method "xterm_keys="
+    def xterm_keys
+      @options.xterm_keys
+    end
+    alias_method :xterm_keys?, :xterm_keys
+
+    def xterm_keys=(bool)
+      @options.xterm_keys = bool
+    end
+
+    # Sets the window's conception of what characters are considered
+    # word separators, for the purposes of the next and previous word
+    # commands in {Pane#copy_mode copy mode}. The default is `[" ",
+    # "-", "_", "@"]`.
+    #
+    # @return [Array<String>]
+    attr_accessor :word_separators
+    undef_method "word_separators"
+    undef_method "word_separators="
+    def word_separators
+      @options.word_separators
+    end
+
+    def word_separators=(value)
+      @options.word_separators = value
+    end
+
+    # This option configures whether programs running inside tmux may
+    # use the terminal alternate screen feature, which allows the
+    # smcup and rmcup {http://linux.die.net/man/5/terminfo
+    # terminfo(5)} capabilities to be issued to preserve the existing
+    # window content on start and restore it on exit.
+    #
+    # @return [Boolean]
+    attr_accessor :alternate_screen
+    undef_method "alternate_screen"
+    undef_method "alternate_screen="
+    def alternate_screen
+      @options.alternate_screen
+    end
+    alias_method :alternate_screen?, :alternate_screen
+
+    def alternate_screen=(bool)
+      @options.alternate_screen = bool
+    end
+
+    # Mouse state in modes. If true, the mouse may be used to copy a
+    # selection by dragging in {Pane#copy_mode copy mode}, or to
+    # select an option in choice mode.
+    #
+    # @return [Boolean]
+    attr_accessor :mode_mouse
+    undef_method "mode_mouse"
+    undef_method "mode_mouse="
+    def mode_mouse
+      @options.mode_mouse
+    end
+    alias_method :mode_mouse?, :mode_mouse
+
+    def mode_mouse=(bool)
+      @options.mode_mouse = bool
+    end
+
+    # Clock color.
+    #
+    # @return [Symbol]
+    attr_accessor :clock_mode_color
+    undef_method "clock_mode_color"
+    undef_method "clock_mode_color="
+    def clock_mode_color
+      @options.clock_mode_colour
+    end
+    alias_method :clock_mode_colour, :clock_mode_color
+
+    def clock_mode_color=(color)
+      @options.clock_mode_colour = color
+    end
+    alias_method :clock_mode_colour=, "clock_mode_color="
+
+    # Clock hour format.
+    #
+    # @return [Symbol<:twelve, :twenty_four>]
+    attr_accessor :clock_mode_style
+    undef_method "clock_mode_style"
+    undef_method "clock_mode_style="
+
+    def clock_mode_style
+      @options.clock_mode_style
+    end
+
+    def clock_mode_style=(style)
+      @options.clock_mode_style = style
+    end
+
+    # Set the height of the main (left or top) pane in the
+    # main-horizontal or main-vertical {#layout= layouts}.
+    #
+    # @return [Number]
+    # @see #layout=
+    attr_accessor :main_pane_height
+    undef_method "main_pane_height"
+    undef_method "main_pane_height="
+    def main_pane_height
+      @options.main_pane_height
+    end
+
+    def main_pane_height=(height)
+      @options.main_pane_height = height
+    end
+
+    # Set the width of the main (left or top) pane in the
+    # main-horizontal or main-vertical {#layout= layouts}.
+    #
+    # @return [Number]
+    # @see #layout=
+    attr_accessor :main_pane_width
+    undef_method "main_pane_width"
+    undef_method "main_pane_width="
+    def main_pane_width
+      @options.main_pane_width
+    end
+
+    def main_pane_width=(width)
+      @options.main_pane_width = width
+    end
+
+    # @return [Symbol]
+    attr_accessor :mode_attr
+    undef_method "mode_attr"
+    undef_method "mode_attr="
+    def mode_attr
+      @options.mode_attr
+    end
+
+    def mode_attr=(attr)
+      @options.mode_attr = attr
+    end
+
+    # @return [Symbol]
+    attr_accessor :mode_bg
+    undef_method "mode_bg"
+    undef_method "mode_bg="
+    def mode_bg
+      @options.mode_bg
+    end
+
+    def mode_bg=(bg)
+      @options.mode_bg = bg
+    end
+
+    # @return [Symbol]
+    attr_accessor :mode_fg
+    undef_method "mode_fg"
+    undef_method "mode_fg="
+    def mode_fg
+      @options.mode_fg
+    end
+
+    def mode_fg=(fg)
+      @options.mode_fg = fg
+    end
+
+    # @return [Symbol]
+    attr_accessor :mode_keys
+    undef_method "mode_keys"
+    undef_method "mode_keys="
+    def mode_keys
+      @options.mode_keys
+    end
+
+    def mode_keys=(keymap)
+      @options.mode_keys = keymap
+    end
+
     # Kills the window.
     # @tmux kill-window
     # @return [void]
