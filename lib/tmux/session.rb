@@ -244,11 +244,13 @@ module Tmux
     attr_reader :windows
     undef_method "windows"
     def windows
+      hash = {}
       @server.check_for_version!("1.1")
 
-      windows_information.map do |num, information|
-        Window.new(self, num)
+      windows_information.each do |num, information|
+        hash[num] = Window.new(self, num)
       end
+      hash
     end
 
     # @param [Hash] search Filters the resulting hash using {FilterableHash#filter}
