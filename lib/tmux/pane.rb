@@ -286,29 +286,37 @@ module Tmux
 
     # @endgroup
 
-    # Splits the pane.
+    # Split the pane and move an existing pane into the new area.
     #
-    # @return [Pane, nil] Returns the newly created pane, but only if
-    #   :make_active is true. See
-    #   http://sourceforge.net/tracker/?func=detail&aid=3030471&group_id=200378&atid=973265
-    #   for more information.
+    # @param [Pane] pane The {Pane pane} to join
     #
     # @option args [Boolean] :make_active (true) Switch to the newly generated pane
     # @option args [Symbol<:vertical, :horizontal>] :direction (:vertical) The direction to split in
     # @option args [Number] :size Size of the new pane in lines (for vertical split) or in cells (for horizontal split)
     # @option args [Number] :percentage Size of the new pane in percent.
-    # @option args [String] :command Command to run in the new pane (optional)
-    #
-    # @tmux split-window
-    # @tmuxver &gt;=1.2
-    def split(args = {})
+    def join(pane, args = {})
       server.check_for_version!("1.2")
-
       args = {
         :make_active => true,
         :direction   => :vertical,
       }.merge(args)
+      flags = split_or_join_flags(args)
+      flags << "-s #{pane.identifier}"
+      flags << "-t #{identifier}"
 
+      server.invoke_command "join-pane #{flags.join(" ")} "
+      if args[:make_active]
+        num = server.invoke_command("display -p -t #{@window.session.any_client.identifier} '#P'").chomp
+        return Pane.new(@window, num)
+      else
+        return nil
+      end
+    end
+
+    # join-pane    [-dhv] [-l size | -p percentage] [-s src-pane] [-t dst-pane]
+    # split-window [-dhv] [-l size | -p percentage] [-t target-pane] [shell-command]
+
+    def split_or_join_flags(args)
       flags = []
       flags << "-d" unless args[:make_active]
       flags << case args[:direction]
@@ -326,6 +334,33 @@ module Tmux
       elsif args[:percentage]
         flags << "-p #{args[:percentage]}"
       end
+
+      return flags
+    end
+    private :split_or_join_flags
+
+    # Splits the pane.
+    #
+    # @return [Pane, nil] Returns the newly created pane, but only if
+    #   :make_active is true. See
+    #   http://sourceforge.net/tracker/?func=detail&aid=3030471&group_id=200378&atid=973265
+    #   for more information.
+    #
+    # @option args [Boolean] :make_active (true) Switch to the newly generated pane
+    # @option args [Symbol<:vertical, :horizontal>] :direction (:vertical) The direction to split in
+    # @option args [Number] :size Size of the new pane in lines (for vertical split) or in cells (for horizontal split)
+    # @option args [Number] :percentage Size of the new pane in percent.
+    # @option args [String] :command Command to run in the new pane (optional)
+    #
+    # @tmux split-window
+    # @tmuxver &gt;=1.2
+    def split(args = {})
+      server.check_for_version!("1.2")
+      args = {
+        :make_active => true,
+        :direction   => :vertical,
+      }.merge(args)
+      flags = split_or_join_flags(args)
 
       flags << "-t #{identifier}"
       flags << '"' + args[:command] + '"' if args[:command] # TODO escape
