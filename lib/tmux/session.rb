@@ -35,7 +35,7 @@ module Tmux
     #
     # @tmux new-window
     # @return [Window] The newly created {Window window}
-    def create_window(args)
+    def create_window(args = {})
       args = {
         :kill_existing => false,
         :make_active   => true,
