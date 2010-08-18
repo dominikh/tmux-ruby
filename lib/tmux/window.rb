@@ -626,27 +626,34 @@ module Tmux
 
     # @param [Symbol<:never, :if_same_window, :always>] return_if When
     #   to return the current pane.
+    #
+    #   Note: In tmux versions prior to 1.4, :always can lead to flickering
+    #   Note: Since tmux version 1.4, :always is forced
     # @return [Pane, nil] The current pane
     attr_reader :current_pane
     undef_method "current_pane"
     def current_pane(return_if = :always)
-      cur_window = self.session.any_client.current_window
-      same_window = cur_window == self
-      return_if_b = ((return_if == :if_same_window && same_window) || (return_if == :always))
+      if server.version >= "1.4"
+        self.panes.find(&:active?)
+      else
+        cur_window = self.session.any_client.current_window
+        same_window = cur_window == self
+        return_if_b = ((return_if == :if_same_window && same_window) || (return_if == :always))
 
-      self.select if return_if_b && !same_window
+        self.select if return_if_b && !same_window
 
-      new_pane = nil
-      if return_if_b
-        num = server.invoke_command("display -p -t #{self.session.any_client.identifier} '#P'").chomp
-        new_pane = Pane.new(self, num)
+        new_pane = nil
+        if return_if_b
+          num = server.invoke_command("display -p -t #{self.session.any_client.identifier} '#P'").chomp
+          new_pane = Pane.new(self, num)
+        end
+
+        if return_if == :always && !same_window
+          self.session.select_previous_window
+        end
+
+        return new_pane if new_pane
       end
-
-      if return_if == :always && !same_window
-        self.session.select_previous_window
-      end
-
-      return new_pane if new_pane
     end
 
     # Reactivates a window in which the command has exited.

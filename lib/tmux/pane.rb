@@ -355,8 +355,10 @@ module Tmux
 
     # @param [Symbol<:up, :down, :left, :right>] direction direction to move to
     # @param [Symbol<:never, :if_same_window, :always>] return_new whether to return the pane we moved
-    #   to. Note: this might produce a short flickering if we have
-    #   to move to the appropriate window and back.
+    #   to.
+    #
+    #   Note: In tmux versions prior to 1.4, :always can lead to flickering
+    #   Note: Since tmux version 1.4, :always is forced
     # @tmuxver &gt;=1.3
     # @return [Pane, nil]
     def select_direction(direction, return_new = :if_same_window)
