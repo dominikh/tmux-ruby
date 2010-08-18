@@ -558,13 +558,14 @@ module Tmux
       hash = {}
       output = server.invoke_command "list-panes -t #{identifier}"
       output.each_line do |pane|
-        params = pane.match(/^(?<num>\d+): \[(?<width>\d+)x(?<height>\d+)\] \[history (?<cur_history>\d+)\/(?<max_history>\d+), (?<memory>\d+) bytes\]$/)
+        params = pane.match(/^(?<num>\d+): \[(?<width>\d+)x(?<height>\d+)\] \[history (?<cur_history>\d+)\/(?<max_history>\d+), (?<memory>\d+) bytes\](?<active> \(active\))?$/)
         num = params[:num].to_i
         width = params[:width].to_i
         height = params[:height].to_i
         cur_history = params[:cur_history].to_i
         max_history = params[:max_history].to_i
         memory = Filesize.new(params[:memory].to_i)
+        active = !params[:active].nil?
 
         hash[num] = {
           :num => num,
@@ -573,6 +574,7 @@ module Tmux
           :cur_history => cur_history,
           :max_history => max_history,
           :memory => memory,
+          :active => active,
         }
       end
       hash.extend FilterableHash

@@ -98,6 +98,18 @@ module Tmux
       @window.panes_information[@number][:memory]
     end
 
+    # @return [Boolean] True if the pane is the currently selected one
+    #   in its window.
+    # @tmuxver &gt;=1.4
+    attr_reader :active
+    undef_method "active"
+    def active
+      server.check_for_version!("1.4")
+
+      @window.panes_information[@number][:active]
+    end
+    alias_method :active?, :active
+
     # @group Modes
 
     # Enter copy mode.
