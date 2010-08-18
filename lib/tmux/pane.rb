@@ -142,7 +142,7 @@ module Tmux
     #
     # @param [Boolean] select If true, the new {Window window} will be
     #   selected automatically
-    # @return [void]
+    # @return [Pane]
     # @tmuxver &gt;=1.0
     # @tmux break-pane
     def break(select = true)
