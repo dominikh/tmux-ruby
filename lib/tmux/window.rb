@@ -622,10 +622,9 @@ module Tmux
       server.invoke_command "swap-window -s #{identifier} -t #{window.identifier}"
     end
 
-    # @param [Symbol<:never, :if_same_window, :always>] return_new whether to return the pane we moved
-    #   to. Note: this might produce a short flickering if we have
-    #   to move to the appropriate window and back.
-    # @return [Pane, nil]
+    # @param [Symbol<:never, :if_same_window, :always>] return_if When
+    #   to return the current pane.
+    # @return [Pane, nil] The current pane
     attr_reader :current_pane
     undef_method "current_pane"
     def current_pane(return_if = :always)
