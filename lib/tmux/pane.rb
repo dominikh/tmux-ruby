@@ -328,7 +328,7 @@ module Tmux
       end
 
       flags << "-t #{identifier}"
-      flags << args[:command] if args[:command]
+      flags << '"' + args[:command] + '"' if args[:command] # TODO escape
 
       server.invoke_command "split-window #{flags.join(" ")} "
       if args[:make_active]
