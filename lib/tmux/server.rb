@@ -115,7 +115,7 @@ module Tmux
         creation_time = Date.parse(params[:creation_time])
         width         = params[:width].to_i
         height        = params[:height].to_i
-        group         = params[:group].to_i if params[:group]
+        group         = params[:group] ? params[:group].to_i : nil
         attached      = !!params[:attached]
 
         hash[name] = {
