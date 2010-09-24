@@ -191,7 +191,7 @@ module Tmux
     end
     alias_method :attached?, :attached
 
-    # @return [Integer]
+    # @return [Group]
     attr_reader :group
     undef_method "group"
     def group

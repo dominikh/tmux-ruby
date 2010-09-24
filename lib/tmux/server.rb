@@ -115,7 +115,11 @@ module Tmux
         creation_time = Date.parse(params[:creation_time])
         width         = params[:width].to_i
         height        = params[:height].to_i
-        group         = params[:group] ? params[:group].to_i : nil
+        group = if params[:group]
+                  Group.new(self, params[:group].to_i)
+                else
+                  nil
+                end
         attached      = !!params[:attached]
 
         hash[name] = {
@@ -149,6 +153,13 @@ module Tmux
     undef_method "session"
     def session
       sessions.first
+    end
+
+    # @return [Array<Group>] All {Group groups}
+    def groups(search = {})
+      sessions_information(search).map { |name, information|
+        information[:group]
+      }.compact
     end
 
     # @tmux list-clients
