@@ -81,7 +81,7 @@ module Tmux
     # @tmux delete-buffer
     # @return [void]
     def delete
-      freeze! # so we can still access it's old value
+      freeze! # so we can still access its old value
       server.invoke_command "delete-buffer -b #@number -t #{@session.number}"
     end
 

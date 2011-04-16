@@ -47,7 +47,7 @@ module Tmux
     #
     #     # Remove the progress bar again, restoring any old content of the status bar.
     #     # Note: by passing the progress bar to #pop_widget, we avoid breaking the stack
-    #     # if another application decided to display it's own widget on top of ours.
+    #     # if another application decided to display its own widget on top of ours.
     #     session.status_bar.right.pop_widget(pbar)
     #
     #
