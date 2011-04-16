@@ -98,7 +98,7 @@ module Tmux
       text
     end
 
-    # Pastes the content of a buffer into a {Window window}.
+    # Pastes the content of a buffer into a {Window window} or {Pane pane}.
     #
     # @param [Window] target The {Pane pane} or {Window window} to
     #   paste the buffer into. Note: {Pane Panes} as as target are only
