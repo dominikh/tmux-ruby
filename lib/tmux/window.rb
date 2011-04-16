@@ -636,6 +636,12 @@ module Tmux
       if server.version >= "1.4"
         self.panes.find(&:active?)
       else
+        # In tmux <1.4, we can only determine the selected pane of the
+        # current window.
+        #
+        # If the user specified return_if = :always, we select this
+        # window (if it is not already selected), determine the
+        # current pane and select the lastly selected window again.
         cur_window = self.session.any_client.current_window
         same_window = cur_window == self
         return_if_b = ((return_if == :if_same_window && same_window) || (return_if == :always))
