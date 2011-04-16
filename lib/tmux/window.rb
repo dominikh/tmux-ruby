@@ -662,6 +662,17 @@ module Tmux
       end
     end
 
+    # Select the previously selected pane.
+    #
+    # @param return_if (see Window#current_pane)
+    # @return (see Window#current_pane)
+    # @tmux last-pane
+    # @tmuxver &gt;=1.4
+    def select_last_pane(return_if = :always)
+      server.invoke_command("last-pane -t #{identifier}")
+      current_pane(return_if)
+    end
+
     # Reactivates a window in which the command has exited.
     #
     # @param [String, nil] command The command to use to respawn the
