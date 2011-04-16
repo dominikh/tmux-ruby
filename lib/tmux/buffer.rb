@@ -10,7 +10,11 @@ module Tmux
     # @return [Filesize]
     def initialize(number, session)
       @number, @session, @size = number, session
-      @file = Tempfile.new("buffer")
+      unless server.version >= "1.3"
+        # we do not need a temporary file for tmux versions that can
+        # directly load/save from/to stdin/stdout
+        @file = Tempfile.new("buffer")
+      end
     end
 
     # @param [Boolean] force_reload Ignore frozen state if true
@@ -35,8 +39,12 @@ module Tmux
       if @data && !force_reload
         @data
       else
-        server.invoke_command "save-buffer -b #@number -t #{@session.number} #{@file.path}"
-        @file.read
+        if server.version >= "1.3"
+          return server.invoke_command "save-buffer -b #@number -t #{@session.identifier} -"
+        else
+          server.invoke_command "save-buffer -b #@number -t #{@session.identifier} #{@file.path}"
+          return @file.read
+        end
       end
     end
 
