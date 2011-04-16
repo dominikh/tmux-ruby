@@ -42,7 +42,7 @@ module Tmux
 
     def data=(new_data)
       # FIXME maybe some more escaping?
-      server.invoke_command "set-buffer -b #@number -t #{@session.number} \"#{new_data}\""
+      server.invoke_command "set-buffer -b #@number -t #{@session.identifier} \"#{new_data}\""
       @data = data(true) if @frozen
       @size = size(true)
     end
@@ -55,7 +55,7 @@ module Tmux
     # @return [void]
     def save(file, append = false)
       flag = append ? "-a" : ""
-      server.invoke_command "save-buffer #{flag} -b #@number -t #{@session.number} #{file}"
+      server.invoke_command "save-buffer #{flag} -b #@number -t #{@session.identifier} #{file}"
     end
     alias_method :write, :save
 
@@ -82,7 +82,7 @@ module Tmux
     # @return [void]
     def delete
       freeze! # so we can still access its old value
-      server.invoke_command "delete-buffer -b #@number -t #{@session.number}"
+      server.invoke_command "delete-buffer -b #@number -t #{@session.identifier}"
     end
 
     # @return [String] The content of a buffer
