@@ -342,7 +342,7 @@ module Tmux
     # Splits the pane.
     #
     # @return [Pane, nil] Returns the newly created pane, but only if
-    #   :make_active is true. See
+    #   :make_active is true or if using tmux &gt;=1.4. See
     #   http://sourceforge.net/tracker/?func=detail&aid=3030471&group_id=200378&atid=973265
     #   for more information.
     #
@@ -360,6 +360,16 @@ module Tmux
         :make_active => true,
         :direction   => :vertical,
       }.merge(args)
+
+      # Since tmux 1.4 we have the last-pane command, which allows us
+      # to temporarily select the new pane, get its identifer and
+      # select the last pane again.
+      temporarily_make_active = false
+      if server.version >= "1.4" && !args[:make_active]
+        args[:make_active] = true
+        temporarily_make_active = true
+      end
+
       flags = split_or_join_flags(args)
 
       flags << "-t #{identifier}"
@@ -368,6 +378,11 @@ module Tmux
       server.invoke_command "split-window #{flags.join(" ")} "
       if args[:make_active]
         num = server.invoke_command("display -p -t #{@window.session.any_client.identifier} '#P'").chomp
+
+        if temporarily_make_active
+          @window.select_last_pane(:never)
+        end
+
         return Pane.new(@window, num)
       else
         return nil
