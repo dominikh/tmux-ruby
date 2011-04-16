@@ -61,6 +61,7 @@ module Tmux
       @options = OptionsList.new(:server, self, false)
     end
 
+    # @return [-1, 0, 1]
     def <=>(other)
       return nil unless other.is_a?(Server)
       @socket <=> other.socket
