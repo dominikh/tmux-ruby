@@ -21,7 +21,7 @@ module Tmux
       if @size && !force_reload
         @size
       else
-        @session.buffers_information[:size]
+        Filesize.new(@session.buffers_information[number][:size].to_i)
       end
     end
 
