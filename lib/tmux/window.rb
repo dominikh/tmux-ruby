@@ -565,6 +565,8 @@ module Tmux
         cur_history = params[:cur_history].to_i
         max_history = params[:max_history].to_i
         memory = Filesize.new(params[:memory].to_i)
+
+        # this flag requires tmux >=1.4
         active = !params[:active].nil?
 
         hash[num] = {
