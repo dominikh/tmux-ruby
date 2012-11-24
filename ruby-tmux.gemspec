@@ -12,6 +12,5 @@ Gem::Specification.new do |gem|
   gem.email    = 'dominikh@fork-bomb.org'
   gem.homepage = 'https://github.com/dominikh/tmux-ruby'
 
-  # ensure the gem is built out of versioned files
-  gem.files = Dir['{bin,lib,man,test,spec}/**/*', 'README*', 'LICENSE*'] & `git ls-files -z`.split("\0")
+  gem.files = Dir['{bin,lib,man,test,spec}/**/*', 'README*', 'LICENSE*']
 end
