@@ -5,8 +5,8 @@ Gem::Specification.new do |gem|
   gem.version = String.new Tmux::VERSION
   gem.date    = Date.today.to_s
 
-  gem.summary = "ruby library to control tmux"
-  gem.description = "ruby library to control tmux"
+  gem.summary = "Ruby library to control tmux"
+  gem.description = "Ruby library to control tmux"
 
   gem.authors  = ['Dominik Honnef']
   gem.email    = 'dominikh@fork-bomb.org'
