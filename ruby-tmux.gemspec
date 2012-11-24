@@ -12,9 +12,6 @@ Gem::Specification.new do |gem|
   gem.email    = 'dominikh@fork-bomb.org'
   gem.homepage = 'https://github.com/dominikh/tmux-ruby'
 
-  #gem.add_dependency('rake')
-  gem.add_development_dependency('rspec', [">= 2.0.0"])
-
   # ensure the gem is built out of versioned files
   gem.files = Dir['{bin,lib,man,test,spec}/**/*', 'README*', 'LICENSE*'] & `git ls-files -z`.split("\0")
 end
