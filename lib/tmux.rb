@@ -11,12 +11,10 @@ require "tmux/status_bar"
 require "tmux/options_list"
 require "tmux/options"
 require "tmux/widget"
+require "tmux/version"
 
 # @todo Support querying and modifying keymaps
 module Tmux
-  # The version of this library
-  VERSION = "0.0.1".freeze
-
   # The newest version of tmux we officially support
   TMUX_VERSION = "1.3".freeze
 
