@@ -17,10 +17,10 @@ module Tmux
       end
     end
 
+    # @!attribute [r] size
+    #
     # @param [Boolean] force_reload Ignore frozen state if true
     # @return [Filesize]
-    attr_reader :size
-    undef_method "size"
     def size(force_reload = false)
       if @size && !force_reload
         @size
@@ -29,11 +29,10 @@ module Tmux
       end
     end
 
+    # Receive the buffer's data.
+    #
     # @param [Boolean] force_reload Ignore frozen state if true
     # @return [String]
-    attr_accessor :data
-    undef_method "data"
-    undef_method "data="
     def data(force_reload = false)
       # note: we cannot use show-buffer because that would escape tabstops
       if @data && !force_reload
@@ -48,6 +47,10 @@ module Tmux
       end
     end
 
+    # Set the buffer's data.
+    #
+    # @param [String] new_data
+    # @return [String]
     def data=(new_data)
       # FIXME maybe some more escaping?
       server.invoke_command "set-buffer -b #@number -t #{@session.identifier} \"#{new_data}\""
@@ -77,9 +80,9 @@ module Tmux
       @size = size
     end
 
+    # @!attribute [r] server
+    #
     # @return [Server]
-    attr_reader :server
-    undef_method "server"
     def server
       @session.server
     end

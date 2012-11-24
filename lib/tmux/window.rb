@@ -13,40 +13,20 @@ module Tmux
 
     class << self
       # @return [OptionsList]
-      attr_reader :options
-      undef_method "options"
       def options(server)
         OptionsList.new(:window, server, true)
       end
     end
 
-    # @overload number
-    #   @return [Number]
-    # @overload number=(new_number)
-    #   @return [Number]
-    #   @raise [Exception::IndexInUse]
-    #   @see #move
     # @return [Number]
-    attr_accessor :number
-    undef_method "number="
+    attr_reader :number
 
-    # @overload session
-    #   @return [Session]
-    # @overload session=(new_session)
-    #   Moves the window to another {Session session}. First it tries
-    #   to reuse the current number of the window. If that number is
-    #   already used in the new {Session session}, the first free
-    #   number will be used instead.
-    #
-    #   @return [Session]
-    #   @raise [Exception::IndexInUse]
-    #   @see #move
-    #   @todo use base-index
     # @return [Session]
-    attr_accessor :session
-    undef_method "session="
+    attr_reader :session
+
     # @return [OptionsList]
     attr_reader :options
+
     # @return [Status]
     attr_reader :status
     def initialize(session, number)
@@ -55,6 +35,17 @@ module Tmux
       @status = Status.new(self)
     end
 
+    # @!attribute session
+    #
+    # Moves the window to another {Session session}. First it tries
+    # to reuse the current number of the window. If that number is
+    # already used in the new {Session session}, the first free
+    # number will be used instead.
+    #
+    # @return [Session]
+    # @raise [Exception::IndexInUse]
+    # @see #move
+    # @todo use base-index
     def session=(new_session)
       i = -1
       first_try = true
@@ -67,6 +58,10 @@ module Tmux
       end
     end
 
+    # @!attribute number
+    # @return [Number]
+    # @raise [Exception::IndexInUse]
+    # @see #move
     def number=(new_number)
       move(@session, new_number)
     end
@@ -115,57 +110,58 @@ module Tmux
       self == other
     end
 
+    # @!attribute [r] server
+    #
     # @return [Server]
-    attr_reader :server
-    undef_method "server"
     def server
       @session.server
     end
 
+    # @!attribute name
     # @return [String]
     # @tmuxver &gt;=1.1
     # @tmux rename-window
-    attr_accessor :name
-    undef_method "name"
-    undef_method "name="
     def name
       server.check_for_version!("1.1")
 
       @session.windows_information[@number][:name]
     end
 
+    # @return [String]
     def name=(value)
       # TODO escape name?
       server.invoke_command "rename-window -t #{identifier} '#{value}'"
     end
 
+    # @!attribute [r] width
+    #
     # @return [Integer]
     # @tmuxver &gt;=1.1
-    attr_reader :width
-    undef_method "width"
     def width
       server.check_for_version!("1.1")
 
       @session.windows_information[@number][:width]
     end
 
+    # @!attribute [r] height
+    #
     # @return [Integer]
     # @tmuxver &gt;=1.1
-    attr_reader :height
-    undef_method "height"
     def height
       server.check_for_version!("1.1")
 
       @session.windows_information[@number][:height]
     end
 
+    # @!attribute [r] identifier
+    #
     # @return [String]
-    attr_reader :identifier
-    undef_method "identifier"
     def identifier
       "%s:%s" % [@session.identifier, @number]
     end
 
+    # @!attribute aggressive_resize
+    #
     # Aggressively resize the window. This means that tmux will resize
     # the window to the size of the smallest {Session session} for
     # which it is the current window, rather than the smallest
@@ -175,18 +171,19 @@ module Tmux
     # SIGWINCH and poor for interactive programs such as shells.
     #
     # @return [Boolean]
-    attr_accessor :aggressive_resize
-    undef_method "aggressive_resize"
-    undef_method "aggressive_resize="
     def aggressive_resize
       @options.aggressive_resize
     end
     alias_method :aggressive_resize?, :aggressive_resize
 
+    # @param [Boolean] bool
+    # @return [Boolean]
     def aggressive_resize=(bool)
       @options.aggressive_resize = bool
     end
 
+    # @!attribute automatic_rename
+    #
     # Control automatic window renaming. When this setting is enabled,
     # tmux will attempt – on supported platforms – to rename the
     # window to reflect the command currently running in it. This flag
@@ -195,171 +192,179 @@ module Tmux
     # {Server#create_session}, or later with {#name=}.
     #
     # @return [Boolean]
-    attr_accessor :automatic_rename
-    undef_method "automatic_rename"
-    undef_method "automatic_rename="
     def automatic_rename
       @options.automatic_rename
     end
     alias_method :automatic_rename?, :automatic_rename
 
+    # @param [Boolean] bool
+    # @return [Boolean]
     def automatic_rename=(bool)
       @options.automatic_rename = bool
     end
 
+    # @!attribute synchronize_panes
+    #
     # Duplicate input to any {Pane pane} to all other {Pane panes} in
     # the same window (only for {Pane panes} that are not in any
     # special mode)
     #
     # @return [Boolean]
-    attr_accessor :synchronize_panes
-    undef_method "synchronize_panes"
-    undef_method "synchronize_panes="
     def synchronize_panes
       @options.synchronize_panes
     end
     alias_method :synchronize_panes?, :synchronize_panes
 
+    # @param [Boolean] bool
+    # @return [Boolean]
     def synchronize_panes=(bool)
       @options.synchronize_panes = bool
     end
 
+    # @!attribute remain_on_exit
     # A window with this flag set is not destroyed when the program
     # running in it exits. The window may be reactivated with
     # {#respawn}.
     #
     # @return [Boolean]
-    attr_accessor :remain_on_exit
-    undef_method "remain_on_exit"
-    undef_method "remain_on_exit="
     def remain_on_exit
       @options.remain_on_exit
     end
     alias_method :remain_on_exit?, :remain_on_exit
 
+    # @param [Boolean] bool
+    # @return [Boolean]
     def remain_on_exit=(bool)
       @options.remain_on_exit = bool
     end
 
+    # @!attribute utf8
+    #
     # Instructs tmux to expect UTF-8 sequences to appear in this
     # window.
     #
     # @return [Boolean]
-    attr_accessor :utf8
-    undef_method "utf8"
-    undef_method "utf8="
     def utf8
       @options.utf8
     end
     alias_method :utf8?, :utf8
 
+    # @param [Boolean] bool
+    # @return [Boolean]
     def utf8=(bool)
       @options.utf8 = bool
     end
 
+    # @!attribute monitor_activity
+    #
     # Monitor for activity in the window. Windows with activity are
     # highlighted in the {StatusBar status line}.
     #
     # @return [Boolean]
-    attr_accessor :monitor_activity
-    undef_method "monitor_activity"
-    undef_method "monitor_activity="
     def monitor_activity
       @options.monitor_activity
     end
     alias_method :monitor_activity?, :monitor_activity
 
+    # @param [Boolean] bool
+    # @return [Boolean]
     def monitor_activity=(bool)
       @options.monitor_activity = bool
     end
 
+    # @!attribute monitor_content
+    #
     # Monitor content in the window. When the
     # {http://linux.die.net/man/3/fnmatch fnmatch(3)} pattern appears
     # in the window, it is highlighted in the {StatusBar status line}.
     #
     # @return [String]
-    attr_accessor :monitor_content
-    undef_method "monitor_content"
-    undef_method "monitor_content="
     def monitor_content
       @options.monitor_content
     end
 
+    # @param [String] pattern
+    # @return [String]
     def monitor_content=(pattern)
       @options.monitor_content = pattern
     end
 
+    # @!attribute max_width
+    #
     # Prevent tmux from resizing the window to greater than
     # `max_width`. A value of zero restores the default unlimited
     # setting.
     #
     # @return [Number]
-    attr_accessor :max_width
-    undef_method "max_width"
-    undef_method "max_width="
     def max_width
       @options.force_width
     end
 
+    # @param [Number] value
+    # @return [Number]
     def max_width=(value)
       @options.force_width = value
     end
     alias_method :force_width, :max_width
     alias_method :force_width=, "max_width="
 
+    # @!attribute max_height
+    #
     # Prevent tmux from resizing the window to greater than
     # `max_height`. A value of zero restores the default unlimited
     # setting.
     #
     # @return [Number]
-    attr_accessor :max_height
-    undef_method "max_height"
-    undef_method "max_height="
     def max_height
       @options.force_height
     end
 
+    # @param [Number] value
+    # @return [Number]
     def max_height=(value)
       @options.force_height = value
     end
     alias_method :force_height, :max_height
     alias_method :force_height=, "max_height="
 
+    # @!attribute xterm_keys
+    #
     # If this option is set to true, tmux will generate
     # {http://linux.die.net/man/1/xterm xterm(1)}-style function key
     # sequences. These have a number included to indicate modifiers
     # such as Shift, Alt or Ctrl. The default is false.
     #
     # @return [Boolean]
-    attr_accessor :xterm_keys
-    undef_method "xterm_keys"
-    undef_method "xterm_keys="
     def xterm_keys
       @options.xterm_keys
     end
     alias_method :xterm_keys?, :xterm_keys
 
+    # @param [Boolean] bool
+    # @return [Boolean]
     def xterm_keys=(bool)
       @options.xterm_keys = bool
     end
 
+    # @!attribute word_separators
+    #
     # Sets the window's conception of what characters are considered
     # word separators, for the purposes of the next and previous word
     # commands in {Pane#copy_mode copy mode}. The default is `[" ",
     # "-", "_", "@"]`.
     #
     # @return [Array<String>]
-    attr_accessor :word_separators
-    undef_method "word_separators"
-    undef_method "word_separators="
     def word_separators
       @options.word_separators
     end
 
+    # @param [Array<String>] value
+    # @return [Array<String>]
     def word_separators=(value)
       @options.word_separators = value
     end
 
+    # @!attribute alternate_screen
     # This option configures whether programs running inside tmux may
     # use the terminal alternate screen feature, which allows the
     # smcup and rmcup {http://linux.die.net/man/5/terminfo
@@ -367,142 +372,147 @@ module Tmux
     # window content on start and restore it on exit.
     #
     # @return [Boolean]
-    attr_accessor :alternate_screen
-    undef_method "alternate_screen"
-    undef_method "alternate_screen="
     def alternate_screen
       @options.alternate_screen
     end
     alias_method :alternate_screen?, :alternate_screen
 
+    # @param [Boolean] bool
+    # @return [Boolean]
     def alternate_screen=(bool)
       @options.alternate_screen = bool
     end
 
+    # @!attribute mode_mouse
+    #
     # Mouse state in modes. If true, the mouse may be used to copy a
     # selection by dragging in {Pane#copy_mode copy mode}, or to
     # select an option in choice mode.
     #
     # @return [Boolean]
-    attr_accessor :mode_mouse
-    undef_method "mode_mouse"
-    undef_method "mode_mouse="
     def mode_mouse
       @options.mode_mouse
     end
     alias_method :mode_mouse?, :mode_mouse
 
+    # @param [Boolean] bool
+    # @return [Boolean]
     def mode_mouse=(bool)
       @options.mode_mouse = bool
     end
 
+    # @!attribute clock_mode_colour
+    #
     # Clock color.
     #
     # @return [Symbol]
-    attr_accessor :clock_mode_color
-    undef_method "clock_mode_color"
-    undef_method "clock_mode_color="
     def clock_mode_color
       @options.clock_mode_colour
     end
     alias_method :clock_mode_colour, :clock_mode_color
 
+    # @param [Symbol] color
+    # @return [Symbol]
     def clock_mode_color=(color)
       @options.clock_mode_colour = color
     end
     alias_method :clock_mode_colour=, "clock_mode_color="
 
+    # @!attribute clock_mode_style
+    #
     # Clock hour format.
     #
     # @return [Symbol<:twelve, :twenty_four>]
-    attr_accessor :clock_mode_style
-    undef_method "clock_mode_style"
-    undef_method "clock_mode_style="
-
     def clock_mode_style
       @options.clock_mode_style
     end
 
+    # @param [Symbol<:twelve, :twenty_four>] style
+    # @return [Symbol]
     def clock_mode_style=(style)
       @options.clock_mode_style = style
     end
 
-    # Set the height of the main (left or top) pane in the
+    # @!attribute main_pane_height
+    #
+    # The height of the main (left or top) pane in the
     # main-horizontal or main-vertical {#layout= layouts}.
     #
     # @return [Number]
     # @see #layout=
-    attr_accessor :main_pane_height
-    undef_method "main_pane_height"
-    undef_method "main_pane_height="
     def main_pane_height
       @options.main_pane_height
     end
 
+    # @param [Number] height
+    # @return [Number]
     def main_pane_height=(height)
       @options.main_pane_height = height
     end
 
-    # Set the width of the main (left or top) pane in the
+    # @!attribute main_pane_width
+    #
+    # The width of the main (left or top) pane in the
     # main-horizontal or main-vertical {#layout= layouts}.
     #
     # @return [Number]
     # @see #layout=
-    attr_accessor :main_pane_width
-    undef_method "main_pane_width"
-    undef_method "main_pane_width="
     def main_pane_width
       @options.main_pane_width
     end
 
+    # @param [Number] width
+    # @return [Number]
     def main_pane_width=(width)
       @options.main_pane_width = width
     end
 
+    # @!attribute mode_attr
+    #
     # @return [Symbol]
-    attr_accessor :mode_attr
-    undef_method "mode_attr"
-    undef_method "mode_attr="
     def mode_attr
       @options.mode_attr
     end
 
+    # @param [Symbol] attr
+    # @return [Symbol]
     def mode_attr=(attr)
       @options.mode_attr = attr
     end
 
+    # @!attribute mode_bg
     # @return [Symbol]
-    attr_accessor :mode_bg
-    undef_method "mode_bg"
-    undef_method "mode_bg="
     def mode_bg
       @options.mode_bg
     end
 
+    # @param [Symbol] bg
+    # @return [Symbol]
     def mode_bg=(bg)
       @options.mode_bg = bg
     end
 
+    # @!attribute mode_fg
     # @return [Symbol]
-    attr_accessor :mode_fg
-    undef_method "mode_fg"
-    undef_method "mode_fg="
     def mode_fg
       @options.mode_fg
     end
 
+    # @param [Symbol] fg
+    # @return [Symbol]
     def mode_fg=(fg)
       @options.mode_fg = fg
     end
 
+    # @!attribute mode_keys
+    #
     # @return [Symbol]
-    attr_accessor :mode_keys
-    undef_method "mode_keys"
-    undef_method "mode_keys="
     def mode_keys
       @options.mode_keys
     end
 
+    # @param [Symbol] keymap
+    # @return [Symbol]
     def mode_keys=(keymap)
       @options.mode_keys = keymap
     end
@@ -530,14 +540,13 @@ module Tmux
       server.invoke_command "rotate-window -#{flag} -t #{identifier}"
     end
 
+    # @!attribute [w] layout
+    #
     # @todo attr_reader
-    # @param [Symbol<:even_horizontal, :even_vertical, :main_horizontal, :main_vertical] The layout to apply to the window
-    # @return [Symbol]
+    # @return [Symbol<:even_horizontal, :even_vertical, :main_horizontal, :main_vertical>]
     # @tmux select-layout
     # @tmuxver &gt;=1.3 for :tiled layout
     # @tmuxver &gt;=1.0 for all other layouts
-    attr_writer :layout
-    undef_method "layout="
     def layout=(layout)
       server.check_for_version!("1.0")
       raise Exception::UnsupportedVersion, "1.3" if layout == :tiled && server.version < "1.3"
@@ -583,10 +592,10 @@ module Tmux
       hash.filter(search)
     end
 
+    # @!attribute [r] panes
+    #
     # @return [Array<Pane>] All {Pane panes}
     # @tmuxver &gt;=1.1
-    attr_reader :panes
-    undef_method "panes"
     def panes
       server.check_for_version!("1.1")
 
@@ -632,8 +641,6 @@ module Tmux
     #   Note: In tmux versions prior to 1.4, :always can lead to flickering
     #   Note: Since tmux version 1.4, :always is forced
     # @return [Pane, nil] The current pane
-    attr_reader :current_pane
-    undef_method "current_pane"
     def current_pane(return_if = :always)
       if server.version >= "1.4"
         self.panes.find(&:active?)

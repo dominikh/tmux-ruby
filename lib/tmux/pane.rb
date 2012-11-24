@@ -34,75 +34,75 @@ module Tmux
       [@window, @number] <=> [other.window, other.number]
     end
 
+    # @!attribute [r] server
+    #
     # @return [Server]
-    attr_reader :server
-    undef_method "server"
     def server
       @window.server
     end
 
+    # @!attribute [r] identifier
+    #
     # @return [String]
-    attr_reader :identifier
-    undef_method "identifier"
     def identifier
       @window.identifier + "." + @number.to_s
     end
 
+    # @!attribute [r] width
+    #
     # @return [Integer]
     # @tmuxver &gt;=1.1
-    attr_reader :width
-    undef_method "width"
     def width
       server.check_for_version!("1.1")
 
       @window.panes_information[@number][:width]
     end
 
+    # @!attribute [r] height
+    #
     # @return [Integer]
     # @tmuxver &gt;=1.1
-    attr_reader :height
-    undef_method "height"
     def height
       server.check_for_version!("1.1")
 
       @window.panes_information[@number][:height]
     end
 
+    # @!attribute [r] max_history_size
+    #
     # @return [Integer]
     # @tmuxver &gt;=1.1
-    attr_reader :max_history_size
-    undef_method "max_history_size"
     def max_history_size
       server.check_for_version!("1.1")
 
       @window.panes_information[@number][:max_history]
     end
 
+    # @!attribute [r] current_history_size
+    #
     # @return [Integer]
     # @tmuxver &gt;=1.1
-    attr_reader :current_history_size
-    undef_method "current_history_size"
     def current_history_size
       server.check_for_version!("1.1")
 
       @window.panes_information[@number][:cur_history]
     end
 
+    # @!attribute [r] memory_usage
+    #
     # @return [Filesize]
     # @tmuxver &gt;=1.1
-    attr_reader :memory_usage
-    undef_method "memory_usage"
     def memory_usage
       server.check_for_version!("1.1")
 
       @window.panes_information[@number][:memory]
     end
 
+    # @!attribute [r] active
+    #
     # @return [Boolean] True if the pane is the currently selected one
     #   in its window.
     # @tmuxver &gt;=1.4
-    attr_reader :active
-    undef_method "active"
     def active
       server.check_for_version!("1.4")
 

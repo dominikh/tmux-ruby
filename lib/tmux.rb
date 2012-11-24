@@ -33,7 +33,7 @@ module Tmux
 
     # Invokes a tmux command and returns all output.
     #
-    # @param [String] command Command to invoke
+    # @param [String] cmd Command to invoke
     # @param [Boolean] unset_tmux If true, unsets $TMUX before calling
     #   tmux, to allow nesting
     # @return [String] all output

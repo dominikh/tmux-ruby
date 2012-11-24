@@ -34,7 +34,7 @@ module Tmux
       self
     end
 
-    # @param [Regexp] The regexp which all returned option names have
+    # @param [Regexp] regexp The regexp which all returned option names have
     #   to match
     # @param [Boolean, nil] global Operate on global options? Inherits from @global if nil
     # @return [Hash<String, Object>] Returns a hash of all options

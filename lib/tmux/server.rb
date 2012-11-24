@@ -67,11 +67,11 @@ module Tmux
       @socket <=> other.socket
     end
 
+    # @!attribute [r] server
+    #
     # @return [Server] Returns self. This is useful for other classes
     #   which can operate on Server, {Session}, {Window}, {Pane} and so
     #   on
-    attr_reader :server
-    undef_method "server"
     def server
       self
     end
@@ -131,21 +131,21 @@ module Tmux
       hash.filter(search)
     end
 
+    # @!attribute [r] sessions
+    #
     # @tmux list-sessions
     # @return [Array<Session>] All {Session sessions}
-    attr_reader :sessions
-    undef_method "sessions"
     def sessions(search = {})
       sessions_information(search).map do |name, information|
         Session.new(self, name)
       end
     end
 
+    # @!attribute [r] session
+    #
     # @return [Session] The first {Session session}. This is
     #   especially useful if working with a server that only has one
     #   {Session session}.
-    attr_reader :session
-    undef_method "session"
     def session
       sessions.first
     end
@@ -178,27 +178,26 @@ module Tmux
       hash.filter(search)
     end
 
+    # @!attribute [r] clients
+    #
     # @tmux list-clients
     # @return [Array<Client>]
-    attr_reader :clients
-    undef_method "clients"
     def clients(search = {})
       clients_information(search).map { |device, information|
         Client.new(self, device)
       }
     end
 
+    # @!attribute [r] info
+    #
     # @tmux server-info
     # @return [String] Information about the server
-    attr_reader :info
-    undef_method "info"
     def info
       invoke_command "server-info"
     end
 
+    # @!attribute [r] version
     # @return [String] Version of the tmux server
-    attr_reader :version
-    undef_method "version"
     def version
       @version ||= info.lines.first.split(",").first[/([.\d]+)/]
     end

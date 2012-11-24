@@ -49,10 +49,9 @@ module Tmux
       @session.options.status = true
     end
 
+    # @!attribute background_color
+    #
     # @return [Symbol]
-    attr_accessor :background_color
-    undef_method "background_color"
-    undef_method "background_color="
     def background_color
       @session.options.status_bg
     end
@@ -61,10 +60,9 @@ module Tmux
       @session.options.status_bg = color
     end
 
+    # @!attribute foreground_color
+    #
     # @return [Symbol]
-    attr_accessor :foreground_color
-    undef_method "foreground_color"
-    undef_method "foreground_color="
     def foreground_color
       @session.options.status_fg
     end
@@ -73,11 +71,10 @@ module Tmux
       @session.options.status_fg = color
     end
 
+    # @!attribute interval
+    #
     # @return [Number] The interval in which the status bar will be
     #   updated.
-    attr_accessor :interval
-    undef_method "interval"
-    undef_method "interval="
     def interval
       @session.options.status_interval
     end
@@ -86,13 +83,12 @@ module Tmux
       @session.options.status_interval = value
     end
 
-    # Sets the justification of the window list component of the status
+    # @!attribute justification
+    #
+    # The justification of the window list component of the status
     # line.
     #
     # @return [Symbol<:left, :right, :centre>]
-    attr_accessor :justification
-    undef_method "justification"
-    undef_method "justification="
     def justification
       @session.options.status_justify
     end
@@ -101,10 +97,9 @@ module Tmux
       @session.options.status_justify = val
     end
 
+    # @!attribute keymap
+    #
     # @return [Symbol<:emacs, :vi>]
-    attr_accessor :keymap
-    undef_method "keymap"
-    undef_method "keymap="
     def keymap
       # TODO keymap class?
       @session.options.status_keys
@@ -114,14 +109,13 @@ module Tmux
       @session.options.status_keys = val
     end
 
+    # @!attribute utf8
+    #
     # Instruct tmux to treat top-bit-set characters in
     # {StatusBar::Field#text} as UTF-8. Notably, this is important for
     # wide characters. This option defaults to false.
     #
     # @return [Boolean]
-    attr_accessor :utf8
-    undef_method "utf8"
-    undef_method "utf8="
     def utf8
       @session.options.status_utf8
     end

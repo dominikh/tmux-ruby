@@ -55,24 +55,18 @@ module Tmux
     # ![Screenshot of ProgressBar](http://doc.fork-bomb.org/tmux/screenshots/progress_bar.png)
 
     class ProgressBar < Widget
-      # @overload value
-      #   @return [Number]
-      # @overload value=(new_value)
-      #   Sets an absolute value. It will be automatically
-      #   converted to a percentage when rendered.
-      #
-      #   @return [Number]
-      # @return [Number]
-      attr_accessor :value
-      undef_method "value="
-
+      # @!attribute value
       def value=(new_value)
         @value = new_value
         display
       end
 
+      # @return [Number] The absolute value of the progress bar.
+      attr_reader :value
+
       # @return [String]
       attr_accessor :label
+
       # @return [Number]
       attr_accessor :total
 

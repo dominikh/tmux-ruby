@@ -59,18 +59,19 @@ module Tmux
       return new_window
     end
 
+
+    # @!attribute [r] current_window
+    #
     # @see Client#current_window
     # @return (see Client#current_window)
-    attr_reader :current_window
-    undef_method "current_window"
     def current_window
       any_client.current_window
     end
 
+    # @!attribute [r] current_pane
+    #
     # @see Client#current_pane
     # @return (see Client#current_pane)
-    attr_reader :current_pane
-    undef_method "current_pane"
     def current_pane
       any_client.current_pane
     end
@@ -102,21 +103,21 @@ module Tmux
       [@server, @name] <=> [other.server, other.name]
     end
 
-    # @overload name
-    #   @return [String]
-    # @overload name=(new_name)
-    #   Renames the session.
+    # The session name.
     #
-    #   @todo escape name
-    #   @return [String]
-    #   @tmux rename-session
+    # Setting this will rename the session.
+    #
+    # @todo escape name
+    # @tmux rename-session
     # @return [String]
-    attr_accessor :name
-    undef_method "name="
+    attr_reader :name
+
     # @return [Server]
     attr_reader :server
+
     # @return [OptionsList]
     attr_reader :options
+
     # @return [StatusBar]
     attr_reader :status_bar
     def initialize(server, name)
@@ -125,6 +126,9 @@ module Tmux
       @options = OptionsList.new(:session, self, false)
     end
 
+    # @!attribute name
+    #
+    # @return [String]
     def name=(new_name)
       raise ArgumentError if new_name.to_s.strip.empty?
       ret = @server.invoke_command("rename-session -t #{identifier} '#{new_name}'")
@@ -136,9 +140,9 @@ module Tmux
       @name = new_name
     end
 
+    # @!attribute [r] identifier
+    #
     # @return [String]
-    attr_reader :identifier
-    undef_method "identifier"
     def identifier
       @name
     end
@@ -154,46 +158,46 @@ module Tmux
       @server.invoke_command "lock-session -t #{identifier}"
     end
 
+    # @!attribute [r] num_windows
+    #
     # @return [Integer]
-    attr_reader :num_windows
-    undef_method "num_windows"
     def num_windows
       @server.sessions_information[@name][:num_windows]
     end
 
+    # @!attribute [r] creation_time
+    #
     # @return [Time]
-    attr_reader :creation_time
-    undef_method "creation_time"
     def creation_time
       @server.sessions_information[@name][:creation_time]
     end
     alias_method :created_at, :creation_time
 
+    # @!attribute [r] width
+    #
     # @return [Integer]
-    attr_reader :width
-    undef_method "width"
     def width
       @server.sessions_information[@name][:width]
     end
 
+    # @!attribute [r] height
+    #
     # @return [Integer]
-    attr_reader :height
-    undef_method "height"
     def height
       @server.sessions_information[@name][:height]
     end
 
+    # @!attribute [r] attached
+    #
     # @return [Boolean]
-    attr_reader :attached
-    undef_method "attached"
     def attached
       @server.sessions_information[@name][:attached]
     end
     alias_method :attached?, :attached
 
+    # @!attribute [r] clients
+    #
     # @return [Array<Client>] All {Client clients}
-    attr_reader :clients
-    undef_method "clients"
     def clients
       @server.clients({:session => self})
     end
@@ -238,11 +242,11 @@ module Tmux
       hash.filter(search)
     end
 
+    # @!attribute [r] windows
+    #
     # @tmux list-windows
     # @return [Hash{Number => Window}] All {Window windows}
     # @tmuxver &gt;=1.1
-    attr_reader :windows
-    undef_method "windows"
     def windows
       hash = {}
       @server.check_for_version!("1.1")
@@ -267,10 +271,10 @@ module Tmux
       hash.filter(search)
     end
 
+    # @!attribute [r] buffers
+    #
     # @tmux list-buffers
     # @return [Array<Buffer>] All {Buffer buffers}
-    attr_reader :buffers
-    undef_method "buffers"
     def buffers
       buffers_information.map do |num, information|
         Buffer.new(num, self)

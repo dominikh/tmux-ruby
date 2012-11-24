@@ -3,9 +3,9 @@ module Tmux
   #   method and make sure it is being called.
   class Widget
     # @return [Field]
-    attr_accessor :field
-    undef_method "field="
+    attr_reader :field
 
+    # @!attribute field
     def field=(new_field)
       @field = new_field
       if new_field

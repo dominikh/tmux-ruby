@@ -2,26 +2,26 @@ module Tmux
   class Client
     # @return [Server]
     attr_reader :server
+
     # @return [String]
     attr_reader :device
+
     def initialize(server, device)
       @server, @device = server, device
     end
 
+    # @!attribute [r] identifier
     # @return [String]
-    attr_reader :identifier
-    undef_method "identifier"
     def identifier
       @device
     end
 
+    # @!attribute session
+    #
     # Setting this will make a client switch to another {Session session}.
     #
     # @tmux switch-client
     # @return [Session]
-    attr_accessor :session
-    undef_method "session"
-    undef_method "session="
     def session
       @server.clients_information[@device][:session]
     end
@@ -30,34 +30,32 @@ module Tmux
       @server.invoke_command "switch-client -c #@device -t #{new_session.number}"
     end
 
+    # @!attribute [r] width
+    #
     # @return [Integer]
-    attr_reader :width
-    undef_method "width"
     def width
       @server.clients_information[@device][:width]
     end
 
+    # @!attribute [r] height
     # @return [Integer]
-    attr_reader :height
-    undef_method "height"
     def height
       @server.clients_information[@device][:height]
     end
 
+    # @!attribute [r] term
+    #
     # $TERM of a client.
     #
     # @return [String]
-    attr_reader :term
-    undef_method "term"
     def term
       @server.clients_information[@device][:term]
     end
 
+    # @!attribute [r] utf8
     # True if the terminal is using UTF-8.
     #
     # @return [Boolean]
-    attr_reader :utf8
-    undef_method "utf8"
     def utf8
       @server.clients_information[@device][:utf8]
     end
@@ -98,11 +96,11 @@ module Tmux
       @server.invoke_command "refresh-client -t #@device"
     end
 
+    # @!attribute [r] messages
+    #
     # @tmux show-messages
     # @return [Array<String>] A log of messages
     # @tmuxver &gt;=1.2
-    attr_reader :messages
-    undef_method "messages"
     def messages
       @server.check_for_version!("1.2")
 
@@ -120,10 +118,10 @@ module Tmux
       @server.invoke_command("display-panes -t #@device")
     end
 
+    # @!attribute [r] current_window
+    #
     # @return [Window] The currently displayed {Window window}.
     # @tmuxver &gt;=1.2
-    attr_reader :current_window
-    undef_method "current_window"
     def current_window
       @server.check_for_version!("1.2")
 
@@ -131,10 +129,10 @@ module Tmux
       session.windows[num.to_i]
     end
 
+    # @!attribute [r] current_pane
+    #
     # @return [Pane] The currently displayed {Pane pane}.
     # @tmuxver &gt;=1.2
-    attr_reader :current_pane
-    undef_method "current_pane"
     def current_pane
       @server.check_for_version!("1.2")
 

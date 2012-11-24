@@ -8,10 +8,9 @@ module Tmux
           @state  = state
         end
 
+        # @!attribute background_color
+        #
         # @return [Symbol]
-        attr_accessor :background_color
-        undef_method "background_color"
-        undef_method "background_color="
         def background_color
           get_option "bg"
         end
@@ -20,10 +19,9 @@ module Tmux
           set_option "fg", color
         end
 
+        # @!attribute foreground_color
+        #
         # @return [Symbol]
-        attr_accessor :foreground_color
-        undef_method "foreground_color"
-        undef_method "foreground_color="
         def foreground_color
           get_option "fg"
         end
@@ -32,12 +30,11 @@ module Tmux
           set_option "fg", color
         end
 
+        # @!attribute format
+        #
         # The format in which the window is displayed in the status line window list.
         #
         # @return [String]
-        attr_accessor :format
-        undef_method "format"
-        undef_method "format="
         def format
           get_option "format"
         end
@@ -46,10 +43,9 @@ module Tmux
           set_option "format"
         end
 
+        # @!attribute attributes
+        #
         # @return [Symbol]
-        attr_accessor :attributes
-        undef_method "attributes"
-        undef_method "attributes="
         def attributes
           get_option "attr"
         end
