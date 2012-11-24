@@ -12,5 +12,5 @@ Gem::Specification.new do |gem|
   gem.email    = 'dominikh@fork-bomb.org'
   gem.homepage = 'https://github.com/dominikh/tmux-ruby'
 
-  gem.files = Dir['{bin,lib,man,test,spec}/**/*', 'README*', 'LICENSE*']
+  gem.files = Dir['{lib,examples}/**/*', 'README.md', 'LICENSE', '.yardopts']
 end
