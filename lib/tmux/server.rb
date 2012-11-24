@@ -109,13 +109,14 @@ module Tmux
       hash = {}
       output = invoke_command "list-sessions"
       output.each_line do |session|
-        params = session.match(/^(?<name>\w+?): (?<num_windows>\d+) windows \(created (?<creation_time>.+?)\) \[(?<width>\d+)x(?<height>\d+)\](?: \((?<attached>attached)\))?$/)
+        params = session.match(/^(?<name>.+?): (?<num_windows>\d+) windows \(created (?<creation_time>.+?)\) \[(?<width>\d+)x(?<height>\d+)\](?: \(group (?<group>\d+)\))?(?: \((?<attached>attached)\))?$/)
 
         name          = params[:name]
         num_windows   = params[:num_windows].to_i
         creation_time = Date.parse(params[:creation_time])
         width         = params[:width].to_i
         height        = params[:height].to_i
+        group         = params[:group].to_i if params[:group]
         attached      = !!params[:attached]
 
         hash[name] = {
@@ -124,6 +125,7 @@ module Tmux
           :creation_time => creation_time,
           :width         => width,
           :height        => height,
+          :group         => group,
           :attached      => attached,
         }
       end

@@ -191,6 +191,13 @@ module Tmux
     end
     alias_method :attached?, :attached
 
+    # @return [Integer]
+    attr_reader :group
+    undef_method "group"
+    def group
+      @server.sessions_information[@name][:group]
+    end
+
     # @return [Array<Client>] All {Client clients}
     attr_reader :clients
     undef_method "clients"
