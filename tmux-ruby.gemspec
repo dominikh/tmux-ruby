@@ -10,7 +10,9 @@ Gem::Specification.new do |gem|
   gem.authors  = ['Dominik Honnef']
   gem.email    = 'dominikh@fork-bomb.org'
   gem.homepage = 'https://github.com/dominikh/tmux-ruby'
+  gem.license  = 'MIT'
 
+  gem.add_dependency "filesize"
   gem.required_ruby_version = ">=1.9.1"
   gem.has_rdoc = "yard"
 
