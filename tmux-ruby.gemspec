@@ -14,5 +14,5 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = ">=1.9.1"
   gem.has_rdoc = "yard"
 
-  gem.files = Dir['{lib,examples}/**/*', 'README.md', 'LICENSE', '.yardopts']
+  gem.files = Dir['{lib}/**/*', 'README.md', 'LICENSE', '.yardopts']
 end
