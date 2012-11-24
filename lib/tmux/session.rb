@@ -262,7 +262,12 @@ module Tmux
     # @tmux list-buffers
     def buffers_information(search = {})
       hash = {}
-      buffers = @server.invoke_command "list-buffers -t #{identifier}"
+      if @server.version < "1.5"
+        buffers = @server.invoke_command "list-buffers -t #{identifier}"
+      else
+        buffers = @server.invoke_command "list-buffers"
+      end
+
       buffers.each_line do |buffer|
         num, size = buffer.match(/^(\d+): (\d+) bytes/)[1..2]
         hash[num] = {:size => size}
@@ -275,6 +280,10 @@ module Tmux
     #
     # @tmux list-buffers
     # @return [Array<Buffer>] All {Buffer buffers}
+    # @note Beginning with tmux 1.5, {Buffer buffers} are global and
+    #   not tied to a session anymore. That means that for 1.5 and
+    #   higher, this method will return all buffers of the server,
+    #   making it identical to {Server#buffers}.
     def buffers
       buffers_information.map do |num, information|
         Buffer.new(num, self)

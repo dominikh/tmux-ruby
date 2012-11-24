@@ -202,6 +202,21 @@ module Tmux
       @version ||= info.lines.first.split(",").first[/([.\d]+)/]
     end
 
+    # Returns all buffers of all sessions.
+    #
+    # @return [Array<Buffer>]
+    # @tmux list-buffers
+    # @see Session#buffers
+    def buffers
+      if @server.version < "1.5"
+        # Manually walk all sessions
+        sessions.flat_map {|s| s.buffers}
+      else
+        # There's only a global stack, so any session will do
+        session.buffers
+      end
+    end
+
     # Checks if a version requirement is being met
     #
     # @param [String] required The version at least required

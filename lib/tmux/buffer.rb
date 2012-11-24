@@ -39,9 +39,9 @@ module Tmux
         @data
       else
         if server.version >= "1.3"
-          return server.invoke_command "save-buffer -b #@number -t #{@session.identifier} -"
+          return server.invoke_command "save-buffer -b #@number #{target_argument} -"
         else
-          server.invoke_command "save-buffer -b #@number -t #{@session.identifier} #{@file.path}"
+          server.invoke_command "save-buffer -b #@number #{target_argument} #{@file.path}"
           return @file.read
         end
       end
@@ -53,7 +53,7 @@ module Tmux
     # @return [String]
     def data=(new_data)
       # FIXME maybe some more escaping?
-      server.invoke_command "set-buffer -b #@number -t #{@session.identifier} \"#{new_data}\""
+      server.invoke_command "set-buffer -b #@number #{target_argument} \"#{new_data}\""
       @data = data(true) if @frozen
       @size = size(true)
     end
@@ -66,7 +66,7 @@ module Tmux
     # @return [void]
     def save(file, append = false)
       flag = append ? "-a" : ""
-      server.invoke_command "save-buffer #{flag} -b #@number -t #{@session.identifier} #{file}"
+      server.invoke_command "save-buffer #{flag} -b #@number #{target_argument} #{file}"
     end
     alias_method :write, :save
 
@@ -93,7 +93,7 @@ module Tmux
     # @return [void]
     def delete
       freeze! # so we can still access its old value
-      server.invoke_command "delete-buffer -b #@number -t #{@session.identifier}"
+      server.invoke_command "delete-buffer -b #@number #{target_argument}"
     end
 
     # @return [String] The content of a buffer
@@ -129,6 +129,15 @@ module Tmux
       flag_separator = separator ? "" : "-s \"#{separator}\"" # FIXME escape
       window_param   = target ? "-t #{target.identifier}" : ""
       server.invoke_command "paste-buffer #{flag_pop} #{flag_translate} #{flag_separator} #{window_param}"
+    end
+
+    private
+    def target_argument
+      if server.version < "1.5"
+        "-t #{@session.identifier}"
+      else
+        ""
+      end
     end
   end
 end
