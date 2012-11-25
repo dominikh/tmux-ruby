@@ -65,6 +65,8 @@ module Tmux
     # @see Client#current_window
     # @return (see Client#current_window)
     def current_window
+      # TODO figure out when tmux added "(active)" in list-windows and
+      # use that when possible
       any_client.current_window
     end
 
@@ -229,14 +231,16 @@ module Tmux
       hash = {}
       output = @server.invoke_command "list-windows -t #{identifier}"
       output.each_line do |session|
-        params = session.match(/^(?<num>\d+): (?<name>.+?) \[(?<width>\d+)x(?<height>\d+)\]$/)
+        # TODO make use of the layout information
+        params = session.match(/^(?<num>\d+): (?<name>.+?) \[(?<width>\d+)x(?<height>\d+)\](?: \[layout .+?\])?(?<active> \(active\))?$/)
         next if params.nil? # >=1.3 displays layout information in indented lines
         num    = params[:num].to_i
         name   = params[:name]
         width  = params[:width].to_i
         height = params[:height].to_i
+        active = !params[:active].nil?
 
-        hash[num] = {:num => num, :name => name, :width => width, :height => height}
+        hash[num] = {:num => num, :name => name, :width => width, :height => height, :active => active}
       end
       hash.extend FilterableHash
       hash.filter(search)
