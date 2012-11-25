@@ -232,7 +232,7 @@ module Tmux
       output = @server.invoke_command "list-windows -t #{identifier}"
       output.each_line do |session|
         # TODO make use of the layout information
-        params = session.match(/^(?<num>\d+): (?<name>.+?) \[(?<width>\d+)x(?<height>\d+)\](?: \[layout .+?\])?(?<active> \(active\))?$/)
+        params = session.match(/^(?<num>\d+): (?<name>.*) \[(?<width>\d+)x(?<height>\d+)\](?: \[layout .+?\])?(?<active> \(active\))?$/)
         next if params.nil? # >=1.3 displays layout information in indented lines
         num    = params[:num].to_i
         name   = params[:name]
