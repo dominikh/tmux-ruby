@@ -25,6 +25,7 @@ module Tmux
       # @return [void]
       def push_widget(widget)
         @backups << self.text
+        @widgets.last.field = nil if @widgets.last
         @widgets << widget
         widget.field = self
       end
@@ -42,6 +43,7 @@ module Tmux
         backup = @backups.delete_at(pos)
 
         self.text = backup if backup and pos == 0
+        @widgets.last.field = self if @widgets.last
         widget
       end
       alias_method :remove_widget, :pop_widget
