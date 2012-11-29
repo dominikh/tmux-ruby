@@ -377,7 +377,7 @@ module Tmux
 
       server.invoke_command "split-window #{flags.join(" ")} "
       if args[:make_active]
-        num = server.invoke_command("display -p -t #{@window.session.any_client.identifier} '#P'").chomp
+        num = server.invoke_command("display -p -t #{@window.session.identifier} '#P'").chomp
 
         if temporarily_make_active
           @window.select_last_pane(:never)

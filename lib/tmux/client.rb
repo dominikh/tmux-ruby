@@ -125,7 +125,7 @@ module Tmux
     def current_window
       @server.check_for_version!("1.2")
 
-      num = @server.invoke_command("display -p -t #@device '#I'").chomp
+      num = @server.invoke_command("display -p -t #{session.identifier} '#I'").chomp
       session.windows[num.to_i]
     end
 
