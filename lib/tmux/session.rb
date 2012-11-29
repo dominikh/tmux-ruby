@@ -47,7 +47,11 @@ module Tmux
       flags << "-a" if args[:after_number]
       flags << "-k" if args[:kill_existing]
       flags << "-n '#{args[:name]}'" if args[:name] # FIXME escaping
-      flags << "-t #{args[:number]}" if args[:number]
+      flags << if args[:number]
+                 "-t #{identifier}:#{args[:number]}"
+               else
+                 "-t #{identifier}"
+               end
       flags << args[:command] if args[:command]
 
       @server.invoke_command "new-window #{flags.join(" ")}"
