@@ -125,8 +125,7 @@ module Tmux
     def current_window
       @server.check_for_version!("1.2")
 
-      client_switch = @server.version < "1.5" ? "-t" : "-c"
-      num = @server.invoke_command("display -p #{client_switch} #@device '#I'").chomp
+      num = message_stdout("#I")
       session.windows[num.to_i]
     end
 
@@ -151,7 +150,16 @@ module Tmux
     def message(text)
       @server.check_for_version!("1.0")
 
-      @server.invoke_command "display-message -t #@device \"#{text}\""
+      client_switch = @server.version < "1.5" ? "-t" : "-c"
+      @server.invoke_command "display-message #{client_switch} #@device \"#{text}\""
+    end
+
+    # @api private
+    def message_stdout(text)
+      @server.check_for_version!("1.0")
+
+      client_switch = @server.version < "1.5" ? "-t" : "-c"
+      @server.invoke_command "display-message -p #{client_switch} #@device \"#{text}\"".chomp
     end
 
     # Opens a prompt inside a client allowing a {Window window} index to be entered interactively.

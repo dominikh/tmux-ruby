@@ -659,7 +659,7 @@ module Tmux
 
         new_pane = nil
         if return_if_b
-          num = server.invoke_command("display -p -t #{self.session.any_client.identifier} '#P'").chomp
+          num = self.session.any_client.message_stdout("#P")
           new_pane = Pane.new(self, num)
         end
 
