@@ -660,7 +660,7 @@ module Tmux
         new_pane = nil
         if return_if_b
           num = self.session.any_client.message_stdout("#P")
-          new_pane = Pane.new(self, num)
+          new_pane = Pane.new(self, num.to_i)
         end
 
         if return_if == :always && !same_window
