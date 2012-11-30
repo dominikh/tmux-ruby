@@ -125,7 +125,8 @@ module Tmux
     def current_window
       @server.check_for_version!("1.2")
 
-      num = @server.invoke_command("display -p -t #@device '#I'").chomp
+      client_switch = @server.version < "1.5" ? "-t" : "-c"
+      num = @server.invoke_command("display -p #{client_switch} #@device '#I'").chomp
       session.windows[num.to_i]
     end
 

@@ -567,7 +567,7 @@ module Tmux
       hash = {}
       output = server.invoke_command "list-panes -t #{identifier}"
       output.each_line do |pane|
-        params = pane.match(/^(?<num>\d+): \[(?<width>\d+)x(?<height>\d+)\] \[history (?<cur_history>\d+)\/(?<max_history>\d+), (?<memory>\d+) bytes\](?<active> \(active\))?$/)
+        params = pane.match(/^(?<num>\d+): \[(?<width>\d+)x(?<height>\d+)\] \[history (?<cur_history>\d+)\/(?<max_history>\d+), (?<memory>\d+) bytes\]( %\d+)?(?<active> \(active\))?$/)
         num = params[:num].to_i
         width = params[:width].to_i
         height = params[:height].to_i
