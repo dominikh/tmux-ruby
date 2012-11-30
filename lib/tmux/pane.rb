@@ -149,7 +149,7 @@ module Tmux
       server.check_for_version!("1.0")
 
       server.invoke_command "break-pane -t #{identifier}"
-      num_window, num_pane = server.invoke_command("display -p -t #{@window.session.any_client.identifier} '#I:#P'").chomp.split(":")
+      num_window, num_pane = @window.session.any_client.message_stdout("#I:#P").split(":")
       session = @window.session
       window  = Window.new(session, num_window)
       pane    = Pane.new(window, num_pane)
@@ -306,7 +306,7 @@ module Tmux
 
       server.invoke_command "join-pane #{flags.join(" ")} "
       if args[:make_active]
-        num = server.invoke_command("display -p -t #{@window.session.any_client.identifier} '#P'").chomp
+        num = @window.session.any_client.message_stdout("#P")
         return Pane.new(@window, num)
       else
         return nil
@@ -377,7 +377,7 @@ module Tmux
 
       server.invoke_command "split-window #{flags.join(" ")} "
       if args[:make_active]
-        num = server.invoke_command("display -p -t #{@window.session.any_client.identifier} '#P'").chomp
+        num = @window.session.any_client.message_stdout("#P").chomp
 
         if temporarily_make_active
           @window.select_last_pane(:never)

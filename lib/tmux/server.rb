@@ -109,7 +109,7 @@ module Tmux
       hash = {}
       output = invoke_command "list-sessions"
       output.each_line do |session|
-        params = session.match(/^(?<name>\w+?): (?<num_windows>\d+) windows \(created (?<creation_time>.+?)\) \[(?<width>\d+)x(?<height>\d+)\](?: \((?<attached>attached)\))?$/)
+        params = session.match(/^(?<name>[\w-]+?): (?<num_windows>\d+) windows \(created (?<creation_time>.+?)\) \[(?<width>\d+)x(?<height>\d+)\](?: \((?<attached>attached)\))?$/)
 
         name          = params[:name]
         num_windows   = params[:num_windows].to_i
@@ -157,9 +157,9 @@ module Tmux
       clients = invoke_command "list-clients"
       hash = {}
       clients.each_line do |client|
-        params  = client.match(/^(?<device>.+?): (?<session>\d+) \[(?<width>\d+)x(?<height>\d+) (?<term>.+?)\](?: \((?<utf8>utf8)\))?$/)
+        params  = client.strip.match(/^(?<device>.+?): (?<session>.+?) \[(?<width>\d+)x(?<height>\d+) (?<term>.+?)\](?: \((?<utf8>utf8)\))?$/)
         device  = params[:device]
-        session = sessions[params[:session].to_i]
+        session = sessions(:name => params[:session]).first
         width   = params[:width].to_i
         height  = params[:height].to_i
         term    = params[:term]
