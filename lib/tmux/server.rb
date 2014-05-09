@@ -81,7 +81,7 @@ module Tmux
     # @param [String] command The command to invoke
     # @return [void]
     def invoke_command(command, unset_tmux = false)
-      Tmux.invoke_command("-L #@socket #{command}", unset_tmux)
+      Tmux.invoke_command("-L #{socket} #{command}", unset_tmux)
     end
 
     # Kills a server and thus all {Session sessions}, {Window windows} and {Client clients}.
