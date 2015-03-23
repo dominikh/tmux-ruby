@@ -1,3 +1,6 @@
+**This project is abandoned. It will most likely not work correctly
+  with current versions of tmux. Sorry.**
+
 # Widgets
 
 - Progress bar ({Tmux::Widgets::ProgressBar ProgressBar})
